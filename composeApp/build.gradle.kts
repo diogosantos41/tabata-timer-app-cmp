@@ -4,13 +4,14 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.androidKmpLibrary)
+    alias(libs.plugins.jetbrains.kotlin.serialization)
 }
 
 kotlin {
-    androidLibrary {
-        compileSdk = 36
-        minSdk = 26
-        namespace = "com.dscoding.tabatatimer.composeapp"
+    android {
+        compileSdk = libs.versions.android.compileSdk.get().toInt()
+        minSdk = libs.versions.android.minSdk.get().toInt()
+        namespace = libs.versions.project.applicationId.get().toString()
         experimentalProperties["android.experimental.kmp.enableAndroidResources"] = true
     }
 
@@ -27,19 +28,21 @@ kotlin {
     sourceSets {
         androidMain.dependencies {
             implementation(libs.androidx.activity.compose)
+            implementation(libs.koin.android)
+            implementation(libs.core.splashscreen)
         }
         commonMain.dependencies {
-            implementation(libs.compose.ui)
-            implementation(libs.compose.runtime)
-            implementation(libs.compose.foundation)
-            implementation(libs.compose.components.resources)
+            implementation(libs.bundles.cmp.common)
+            implementation(libs.compose.ui.tooling.preview)
+            implementation(libs.lifecycle.viewmodel.compose)
+            implementation(libs.lifecycle.runtime.compose)
             implementation(libs.compose.material3)
-            implementation(libs.compose.uiToolingPreview)
-            implementation(libs.androidx.lifecycle.viewmodelCompose)
-            implementation(libs.androidx.lifecycle.runtimeCompose)
-        }
-        commonTest.dependencies {
-            implementation(libs.kotlin.test)
+            implementation(libs.compose.material.icons.core)
+            implementation(libs.compose.material.icons.extended)
+            implementation(libs.compose.navigation)
+            implementation(libs.bundles.koin.common)
+            implementation(libs.datastore)
+            implementation(libs.datastore.preferences)
         }
     }
 }
