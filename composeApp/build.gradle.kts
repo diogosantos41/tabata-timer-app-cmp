@@ -30,6 +30,7 @@ kotlin {
             implementation(libs.androidx.activity.compose)
             implementation(libs.koin.android)
             implementation(libs.core.splashscreen)
+            implementation(libs.compose.ui.tooling)
         }
         commonMain.dependencies {
             implementation(libs.bundles.cmp.common)

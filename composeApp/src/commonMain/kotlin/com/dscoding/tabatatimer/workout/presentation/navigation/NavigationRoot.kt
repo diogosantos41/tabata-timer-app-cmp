@@ -1,4 +1,4 @@
-package com.dscoding.tabatatimer.presentation.navigation
+package com.dscoding.tabatatimer.workout.presentation.navigation
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -10,6 +10,7 @@ import androidx.compose.ui.graphics.Color.Companion.Red
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.dscoding.tabatatimer.workout.presentation.workout_setup.WorkoutSetupRoot
 
 @Composable
 fun NavigationRoot(
@@ -21,10 +22,13 @@ fun NavigationRoot(
         startDestination = startDestination
     ) {
         composable<NavigationRoute.WorkoutSetup> {
-            Box(modifier = Modifier.fillMaxSize().background(Green.copy(alpha = 0.25f)))
+            WorkoutSetupRoot()
         }
         composable<NavigationRoute.WorkoutTimer> {
             Box(modifier = Modifier.fillMaxSize().background(Red.copy(alpha = 0.25f)))
+        }
+        composable<NavigationRoute.WorkoutFinished> {
+            Box(modifier = Modifier.fillMaxSize().background(Green.copy(alpha = 0.25f)))
         }
     }
 }
