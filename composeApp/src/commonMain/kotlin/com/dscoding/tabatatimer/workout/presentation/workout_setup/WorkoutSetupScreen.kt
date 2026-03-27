@@ -3,22 +3,19 @@ package com.dscoding.tabatatimer.workout.presentation.workout_setup
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccessTime
-import androidx.compose.material.icons.filled.Handshake
-import androidx.compose.material.icons.filled.HdrStrong
-import androidx.compose.material.icons.filled.Refresh
-import androidx.compose.material.icons.filled.SettingsPower
+import androidx.compose.material.icons.filled.Moving
+import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material.icons.filled.Schedule
+import androidx.compose.material.icons.filled.Sync
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -28,6 +25,7 @@ import com.dscoding.tabatatimer.core.presentation.components.TabataChip
 import com.dscoding.tabatatimer.core.presentation.components.TabataPrimaryButton
 import com.dscoding.tabatatimer.core.presentation.components.TabataSectionHeader
 import com.dscoding.tabatatimer.core.presentation.components.WorkoutSetting
+import com.dscoding.tabatatimer.core.presentation.components.WorkoutSummary
 import com.dscoding.tabatatimer.core.presentation.theme.TabataTimerTheme
 
 @Composable
@@ -52,13 +50,15 @@ fun WorkoutSetupScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(horizontal = 12.dp),
+                .padding(horizontal = 14.dp),
         ) {
+            Spacer(modifier = Modifier.height(16.dp))
             TabataSectionHeader(text = "Quick Presets")
-            Spacer(modifier = Modifier.height(14.dp))
+            Spacer(modifier = Modifier.height(16.dp))
             FlowRow(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 TabataChip(
                     title = "Classic",
@@ -79,37 +79,47 @@ fun WorkoutSetupScreen(
                     isHighlighted = false,
                 )
             }
-            Spacer(modifier = Modifier.height(30.dp))
+            Spacer(modifier = Modifier.height(32.dp))
             TabataSectionHeader(text = "Custom Settings")
-            Spacer(modifier = Modifier.height(14.dp))
+            Spacer(modifier = Modifier.height(16.dp))
             WorkoutSetting(
-                icon = Icons.Default.Handshake,
-                label = "Work Time",
+                icon = Icons.Default.Moving,
+                label = "Work",
                 value = "20s",
                 onSettingIncrease = {},
                 onSettingDecrease = {},
                 modifier = Modifier.fillMaxWidth()
             )
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(10.dp))
             WorkoutSetting(
-                icon = Icons.Default.AccessTime,
-                label = "Rest Time",
+                icon = Icons.Default.Schedule,
+                label = "Rest",
                 value = "10s",
                 onSettingIncrease = {},
                 onSettingDecrease = {},
                 modifier = Modifier.fillMaxWidth()
             )
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(10.dp))
             WorkoutSetting(
-                icon = Icons.Default.Refresh,
+                icon = Icons.Default.Sync,
                 label = "Rounds",
                 value = "8",
                 onSettingIncrease = {},
                 onSettingDecrease = {},
                 modifier = Modifier.fillMaxWidth()
             )
+            Spacer(modifier = Modifier.height(32.dp))
+            TabataSectionHeader(text = "Workout Summary")
+            Spacer(modifier = Modifier.height(16.dp))
+            WorkoutSummary(
+                worktimeDisplayText = "02:30",
+                restTimeDisplayText = "00:40",
+                total = "03:20",
+                modifier = Modifier.fillMaxWidth()
+            )
             Spacer(modifier = Modifier.weight(1f))
             TabataPrimaryButton(
+                iconImageVector = Icons.Default.PlayArrow,
                 text = "Start Workout",
                 onClick = {},
                 modifier = Modifier

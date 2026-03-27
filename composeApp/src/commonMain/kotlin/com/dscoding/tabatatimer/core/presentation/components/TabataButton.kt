@@ -47,7 +47,7 @@ fun ActionButton(
 
 @Preview(showBackground = true)
 @Composable
-fun ActionButtonPreview() {
+private fun ActionButtonPreview() {
     TabataTimerTheme {
         ActionButton(
             text = "+",

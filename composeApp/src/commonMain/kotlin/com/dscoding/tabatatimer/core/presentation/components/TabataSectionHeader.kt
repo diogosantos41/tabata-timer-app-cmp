@@ -26,7 +26,7 @@ fun TabataSectionHeader(
 
 @Preview(showBackground = true)
 @Composable
-fun TabataSectionHeaderPreview() {
+private fun TabataSectionHeaderPreview() {
     TabataTimerTheme {
         TabataSectionHeader(
             text = "Quick Presets",
