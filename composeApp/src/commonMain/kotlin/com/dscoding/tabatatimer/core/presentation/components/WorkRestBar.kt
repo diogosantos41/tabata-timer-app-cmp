@@ -77,6 +77,7 @@ fun WorkRestBar(
             BarIndicatorLabel(
                 text = "Rest",
                 color = restColor,
+                isDotAtEnd = true
             )
         }
     }

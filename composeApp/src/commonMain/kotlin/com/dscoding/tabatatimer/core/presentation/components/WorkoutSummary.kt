@@ -20,14 +20,22 @@ import androidx.compose.ui.unit.dp
 import com.dscoding.tabatatimer.core.presentation.theme.Dimens.ContainerBorderWidth
 import com.dscoding.tabatatimer.core.presentation.theme.Dimens.ContainerRoundedCornerShapeSize
 import com.dscoding.tabatatimer.core.presentation.theme.TabataTimerTheme
+import org.jetbrains.compose.resources.stringResource
+import tabatatimer.composeapp.generated.resources.Res
+import tabatatimer.composeapp.generated.resources.rest_time
+import tabatatimer.composeapp.generated.resources.total
+import tabatatimer.composeapp.generated.resources.work_time
 
 @Composable
 fun WorkoutSummary(
     worktimeDisplayText: String,
     restTimeDisplayText: String,
     total: String,
-    modifier: Modifier = Modifier
-) {
+    workWeight: Float,
+    restWeight: Float,
+    modifier: Modifier = Modifier,
+
+    ) {
     Surface(
         color = MaterialTheme.colorScheme.primaryContainer,
         border = BorderStroke(
@@ -45,24 +53,24 @@ fun WorkoutSummary(
             ) {
                 WorkoutTimeInfo(
                     displayTime = worktimeDisplayText,
-                    description = "Work Time",
+                    description = stringResource(Res.string.work_time),
                     color = MaterialTheme.colorScheme.primary
                 )
                 WorkoutTimeInfo(
                     displayTime = restTimeDisplayText,
-                    description = "Rest Time",
+                    description = stringResource(Res.string.rest_time),
                     color = MaterialTheme.colorScheme.secondary
                 )
                 WorkoutTimeInfo(
                     displayTime = total,
-                    description = "Total",
+                    description = stringResource(Res.string.total),
                     color = MaterialTheme.colorScheme.onPrimaryContainer
                 )
             }
             Spacer(modifier = Modifier.height(20.dp))
             WorkRestBar(
-                workWeight = 0.5f,
-                restWeight = 0.5f
+                workWeight = workWeight,
+                restWeight = restWeight
             )
         }
     }
@@ -77,7 +85,9 @@ private fun WorkoutSummaryPreview() {
                 worktimeDisplayText = "02:30",
                 restTimeDisplayText = "00:40",
                 total = "03:20",
-                modifier = Modifier.fillMaxWidth()
+                workWeight = 0.66f,
+                restWeight = 0.33f,
+                modifier = Modifier.fillMaxWidth(),
             )
         }
     }
