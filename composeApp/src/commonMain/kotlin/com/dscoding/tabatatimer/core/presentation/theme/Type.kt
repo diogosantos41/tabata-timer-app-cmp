@@ -15,6 +15,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.dscoding.tabatatimer.core.presentation.theme.Dimens.NormalSpacing
+import com.dscoding.tabatatimer.core.presentation.theme.Dimens.SmallSpacing
 import org.jetbrains.compose.resources.Font
 import tabatatimer.composeapp.generated.resources.OpenSans_Bold
 import tabatatimer.composeapp.generated.resources.OpenSans_Light
@@ -74,8 +76,8 @@ val Typography: Typography
 private fun TypographyPreview() {
     TabataTimerTheme {
         Column(
-            modifier = Modifier.padding(5.dp),
-            verticalArrangement = Arrangement.spacedBy(15.dp)
+            modifier = Modifier.padding(SmallSpacing),
+            verticalArrangement = Arrangement.spacedBy(NormalSpacing)
         ) {
             Text(text = "body medium", style = MaterialTheme.typography.bodyMedium)
             Text(text = "title small", style = MaterialTheme.typography.titleSmall)

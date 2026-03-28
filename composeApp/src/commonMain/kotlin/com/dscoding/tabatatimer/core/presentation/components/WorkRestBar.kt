@@ -22,7 +22,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.dscoding.tabatatimer.core.presentation.theme.Dimens.ContainerRoundedCornerShapeSize
+import com.dscoding.tabatatimer.core.presentation.theme.Dimens.NormalSpacing
 import com.dscoding.tabatatimer.core.presentation.theme.TabataTimerTheme
+import org.jetbrains.compose.resources.stringResource
+import tabatatimer.composeapp.generated.resources.Res
+import tabatatimer.composeapp.generated.resources.rest
+import tabatatimer.composeapp.generated.resources.work
 
 @Composable
 fun WorkRestBar(
@@ -48,7 +54,7 @@ fun WorkRestBar(
             modifier = modifier
                 .fillMaxWidth()
                 .height(12.dp)
-                .clip(RoundedCornerShape(50))
+                .clip(RoundedCornerShape(ContainerRoundedCornerShapeSize))
         ) {
             Box(
                 modifier = Modifier
@@ -63,7 +69,7 @@ fun WorkRestBar(
                     .background(restColor)
             )
         }
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = Modifier.height(NormalSpacing))
         Row(
             modifier = modifier
                 .fillMaxWidth(),
@@ -71,11 +77,11 @@ fun WorkRestBar(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             BarIndicatorLabel(
-                text = "Work",
+                text = stringResource(Res.string.work),
                 color = workColor,
             )
             BarIndicatorLabel(
-                text = "Rest",
+                text = stringResource(Res.string.rest),
                 color = restColor,
                 isDotAtEnd = true
             )
@@ -87,7 +93,7 @@ fun WorkRestBar(
 @Composable
 private fun WorkRestBarPreview() {
     TabataTimerTheme {
-        Box(modifier = Modifier.padding(15.dp)) {
+        Box(modifier = Modifier.padding(NormalSpacing)) {
             WorkRestBar(
                 workWeight = 0.8f,
             )

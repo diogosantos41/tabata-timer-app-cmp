@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Moving
 import androidx.compose.material.icons.filled.PlayArrow
@@ -18,17 +20,22 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.dscoding.tabatatimer.core.presentation.components.TabataChip
 import com.dscoding.tabatatimer.core.presentation.components.TabataPrimaryButton
 import com.dscoding.tabatatimer.core.presentation.components.TabataSectionHeader
 import com.dscoding.tabatatimer.core.presentation.components.WorkoutSetting
 import com.dscoding.tabatatimer.core.presentation.components.WorkoutSummary
+import com.dscoding.tabatatimer.core.presentation.theme.Dimens.LargeSpacing
+import com.dscoding.tabatatimer.core.presentation.theme.Dimens.NormalSpacing
+import com.dscoding.tabatatimer.core.presentation.theme.Dimens.SmallSpacing
 import com.dscoding.tabatatimer.core.presentation.theme.TabataTimerTheme
 import com.dscoding.tabatatimer.core.presentation.utils.ObserveAsEvents
+import com.dscoding.tabatatimer.workout.presentation.workout_setup.models.SettingChange.Decrease
+import com.dscoding.tabatatimer.workout.presentation.workout_setup.models.SettingChange.Increase
 import com.dscoding.tabatatimer.workout.presentation.workout_setup.models.TimeUi
 import com.dscoding.tabatatimer.workout.presentation.workout_setup.models.WorkoutPreset
+import com.dscoding.tabatatimer.workout.presentation.workout_setup.models.defaultPreset
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import tabatatimer.composeapp.generated.resources.Res
@@ -50,8 +57,8 @@ fun WorkoutSetupRoot(
     ObserveAsEvents(viewModel.events) { event ->
         when (event) {
             is WorkoutSetupEvent.OnStartWorkout -> onStartWorkout(
-                event.work,
-                event.rest,
+                event.workTime,
+                event.restTime,
                 event.rounds
             )
         }
@@ -68,62 +75,70 @@ fun WorkoutSetupScreen(
     state: WorkoutSetupState,
     onAction: (WorkoutSetupAction) -> Unit,
 ) {
+
+    val scrollState = rememberScrollState()
+
     Scaffold { paddingValues ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(horizontal = 14.dp),
+                .padding(horizontal = NormalSpacing)
+                .verticalScroll(scrollState),
         ) {
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(NormalSpacing))
             TabataSectionHeader(text = stringResource(Res.string.quick_presets))
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(NormalSpacing))
             FlowRow(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
+                horizontalArrangement = Arrangement.spacedBy(SmallSpacing),
+                verticalArrangement = Arrangement.spacedBy(SmallSpacing)
             ) {
                 WorkoutPreset.entries.forEach { preset ->
                     TabataChip(
                         title = preset.title.asString(),
-                        description = preset.displayInfo,
+                        description = preset.display,
                         onClick = { onAction(WorkoutSetupAction.OnPresetClick(preset)) },
-                        isHighlighted = false,
+                        isHighlighted = preset.matches(
+                            workTime = state.selectedWorkTime.seconds,
+                            restTime = state.selectedRestTime.seconds,
+                            rounds = state.selectedRounds
+                        )
                     )
                 }
             }
-            Spacer(modifier = Modifier.height(32.dp))
+            Spacer(modifier = Modifier.height(LargeSpacing))
             TabataSectionHeader(text = stringResource(Res.string.custom_settings))
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(NormalSpacing))
             WorkoutSetting(
                 icon = Icons.Default.Moving,
                 label = stringResource(Res.string.work),
-                value = state.selectedWorkTime?.displayTime ?: "",
-                onSettingIncrease = { onAction(WorkoutSetupAction.OnWorkTimeChanged) },
-                onSettingDecrease = { onAction(WorkoutSetupAction.OnWorkTimeChanged) },
+                value = state.selectedWorkTime.displayTime,
+                onSettingIncrease = { onAction(WorkoutSetupAction.OnWorkTimeChanged(Increase)) },
+                onSettingDecrease = { onAction(WorkoutSetupAction.OnWorkTimeChanged(Decrease)) },
                 modifier = Modifier.fillMaxWidth()
             )
-            Spacer(modifier = Modifier.height(10.dp))
+            Spacer(modifier = Modifier.height(SmallSpacing))
             WorkoutSetting(
                 icon = Icons.Default.Schedule,
                 label = stringResource(Res.string.rest),
-                value = state.selectedRestTime?.displayTime ?: "",
-                onSettingIncrease = { onAction(WorkoutSetupAction.OnRestTimeChanged) },
-                onSettingDecrease = { onAction(WorkoutSetupAction.OnRestTimeChanged) },
+                value = state.selectedRestTime.displayTime,
+                onSettingIncrease = { onAction(WorkoutSetupAction.OnRestTimeChanged(Increase)) },
+                onSettingDecrease = { onAction(WorkoutSetupAction.OnRestTimeChanged(Decrease)) },
                 modifier = Modifier.fillMaxWidth()
             )
-            Spacer(modifier = Modifier.height(10.dp))
+            Spacer(modifier = Modifier.height(SmallSpacing))
             WorkoutSetting(
                 icon = Icons.Default.Sync,
                 label = stringResource(Res.string.rounds),
                 value = state.selectedRounds.toString(),
-                onSettingIncrease = { onAction(WorkoutSetupAction.OnRoundsChanged) },
-                onSettingDecrease = { onAction(WorkoutSetupAction.OnRoundsChanged) },
+                onSettingIncrease = { onAction(WorkoutSetupAction.OnRoundsChanged(Increase)) },
+                onSettingDecrease = { onAction(WorkoutSetupAction.OnRoundsChanged(Decrease)) },
                 modifier = Modifier.fillMaxWidth()
             )
-            Spacer(modifier = Modifier.height(32.dp))
+            Spacer(modifier = Modifier.height(LargeSpacing))
             TabataSectionHeader(text = stringResource(Res.string.workout_summary))
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(NormalSpacing))
             WorkoutSummary(
                 worktimeDisplayText = state.totalWorkTime,
                 restTimeDisplayText = state.totalRestTime,
@@ -137,11 +152,10 @@ fun WorkoutSetupScreen(
                 text = stringResource(Res.string.start_workout),
                 onClick = { onAction(WorkoutSetupAction.OnStartWorkoutClick) },
                 modifier = Modifier
-                    .padding(10.dp)
+                    .padding(vertical = LargeSpacing)
                     .fillMaxWidth()
             )
         }
-
     }
 }
 
@@ -152,12 +166,12 @@ private fun Preview() {
         WorkoutSetupScreen(
             state = WorkoutSetupState(
                 selectedWorkTime = TimeUi(
-                    seconds = WorkoutPreset.Classic.work,
+                    seconds = defaultPreset.workTime,
                 ),
                 selectedRestTime = TimeUi(
-                    seconds = WorkoutPreset.Classic.rest,
+                    seconds = defaultPreset.restTime,
                 ),
-                selectedRounds = WorkoutPreset.Classic.rounds,
+                selectedRounds = defaultPreset.rounds,
             ),
             onAction = {}
         )

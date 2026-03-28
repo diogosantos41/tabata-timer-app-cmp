@@ -13,6 +13,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.dscoding.tabatatimer.core.presentation.theme.Dimens.NormalSpacing
 import com.dscoding.tabatatimer.core.presentation.theme.TabataTimerTheme
 
 @Composable
@@ -44,7 +45,7 @@ fun WorkoutTimeInfo(
 @Composable
 private fun WorkoutTimeInfoPreview() {
     TabataTimerTheme {
-        Box(modifier = Modifier.padding(12.dp)) {
+        Box(modifier = Modifier.padding(NormalSpacing)) {
             WorkoutTimeInfo(
                 displayTime = "02:30",
                 description = "Work Time",

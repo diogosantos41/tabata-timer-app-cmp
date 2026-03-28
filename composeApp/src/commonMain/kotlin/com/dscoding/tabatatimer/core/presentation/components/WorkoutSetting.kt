@@ -25,6 +25,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.dscoding.tabatatimer.core.presentation.theme.Dimens.ContainerBorderWidth
 import com.dscoding.tabatatimer.core.presentation.theme.Dimens.ContainerRoundedCornerShapeSize
+import com.dscoding.tabatatimer.core.presentation.theme.Dimens.NormalSpacing
+import com.dscoding.tabatatimer.core.presentation.theme.Dimens.SmallSpacing
 import com.dscoding.tabatatimer.core.presentation.theme.TabataTimerTheme
 
 @Composable
@@ -40,7 +42,7 @@ fun WorkoutSetting(
         color = MaterialTheme.colorScheme.primaryContainer,
         border = BorderStroke(
             width = ContainerBorderWidth,
-            color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.1f)
+            color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.1f)
         ),
         shape = RoundedCornerShape(size = ContainerRoundedCornerShapeSize),
         modifier = modifier
@@ -48,8 +50,8 @@ fun WorkoutSetting(
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            modifier = Modifier.padding(horizontal = 20.dp, vertical = 12.dp)
+            horizontalArrangement = Arrangement.spacedBy(SmallSpacing),
+            modifier = Modifier.padding(horizontal = SmallSpacing, vertical = SmallSpacing)
         ) {
             Icon(
                 imageVector = icon,
@@ -82,7 +84,7 @@ fun WorkoutSetting(
 @Composable
 private fun WorkoutSettingPreview() {
     TabataTimerTheme {
-        Box(modifier = Modifier.padding(15.dp)) {
+        Box(modifier = Modifier.padding(NormalSpacing)) {
             WorkoutSetting(
                 icon = Icons.Default.AccessTime,
                 label = "Work Time",

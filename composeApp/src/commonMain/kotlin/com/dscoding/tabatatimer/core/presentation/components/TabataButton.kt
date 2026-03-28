@@ -12,9 +12,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.dscoding.tabatatimer.core.presentation.theme.Dimens.ContainerBorderWidth
 import com.dscoding.tabatatimer.core.presentation.theme.Dimens.ContainerRoundedCornerShapeSize
+import com.dscoding.tabatatimer.core.presentation.theme.Dimens.NormalSpacing
 import com.dscoding.tabatatimer.core.presentation.theme.TabataTimerTheme
 
 @Composable
@@ -53,7 +53,7 @@ private fun ActionButtonPreview() {
             text = "+",
             onClick = {},
             modifier = Modifier
-                .padding(20.dp)
+                .padding(NormalSpacing)
         )
     }
 }

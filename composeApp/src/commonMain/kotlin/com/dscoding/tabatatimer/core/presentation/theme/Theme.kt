@@ -9,13 +9,11 @@ private val DarkColorScheme = darkColorScheme(
     onPrimary = AppWhite,
     primaryContainer = AppDarkGrey,
     onPrimaryContainer = AppWhite,
+    background = AppBlack,
+    onBackground = AppWhite,
     secondary = AppYellow,
     tertiary = AppBlue,
-    background = AppBlack,
-    surface = AppDarkGrey,
-    onSurface = AppWhite,
     onSurfaceVariant = AppLightGrey,
-    outline = AppLightGrey
 )
 
 @Composable

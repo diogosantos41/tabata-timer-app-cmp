@@ -22,6 +22,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.dscoding.tabatatimer.core.presentation.theme.Dimens.ContainerRoundedCornerShapeSize
+import com.dscoding.tabatatimer.core.presentation.theme.Dimens.NormalSpacing
 import com.dscoding.tabatatimer.core.presentation.theme.TabataTimerTheme
 
 @Composable
@@ -35,7 +36,7 @@ fun TabataPrimaryButton(
         onClick = onClick,
         colors = ButtonDefaults.buttonColors(
             containerColor = MaterialTheme.colorScheme.primary,
-            contentColor = White
+            contentColor = MaterialTheme.colorScheme.onPrimary
         ),
         shape = RoundedCornerShape(size = ContainerRoundedCornerShapeSize),
         modifier = modifier
@@ -43,14 +44,14 @@ fun TabataPrimaryButton(
             .height(60.dp),
     ) {
         Row(
-            modifier = Modifier.padding(horizontal = 8.dp),
+            modifier = Modifier.padding(horizontal = NormalSpacing),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
+            horizontalArrangement = Arrangement.spacedBy(NormalSpacing)
         ) {
             iconImageVector?.let { imageVector ->
                 Icon(
                     imageVector = imageVector,
-                    contentDescription = null
+                    contentDescription = null,
                 )
             }
             Text(
@@ -71,7 +72,7 @@ private fun TabataPrimaryButtonPreview() {
             text = "Start Workout",
             onClick = {},
             modifier = Modifier
-                .padding(10.dp)
+                .padding(NormalSpacing)
         )
     }
 }

@@ -20,6 +20,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.dscoding.tabatatimer.core.presentation.theme.Dimens
+import com.dscoding.tabatatimer.core.presentation.theme.Dimens.NormalSpacing
+import com.dscoding.tabatatimer.core.presentation.theme.Dimens.SmallSpacing
 import com.dscoding.tabatatimer.core.presentation.theme.TabataTimerTheme
 
 @Composable
@@ -38,13 +40,13 @@ fun TabataChip(
     val borderColor = if (isHighlighted) {
         MaterialTheme.colorScheme.primary
     } else {
-        MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.2f)
+        MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.1f)
     }
 
     val textColor = if (isHighlighted) {
         MaterialTheme.colorScheme.primary
     } else {
-        MaterialTheme.colorScheme.outline
+        MaterialTheme.colorScheme.onSurfaceVariant
     }
 
     Box(
@@ -70,7 +72,7 @@ fun TabataChip(
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
-                .padding(vertical = 8.dp, horizontal = 14.dp)
+                .padding(vertical = SmallSpacing, horizontal = NormalSpacing)
                 .align(Alignment.Center)
         ) {
             Text(

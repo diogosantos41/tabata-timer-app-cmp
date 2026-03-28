@@ -6,28 +6,34 @@ import tabatatimer.composeapp.generated.resources.classic
 import tabatatimer.composeapp.generated.resources.endurance
 import tabatatimer.composeapp.generated.resources.quick
 
-enum class WorkoutPreset(val title: UiText, val work: Int, val rest: Int, val rounds: Int) {
+enum class WorkoutPreset(val title: UiText, val workTime: Int, val restTime: Int, val rounds: Int) {
     Classic(
         title = UiText.StringResourceId(Res.string.classic),
-        work = 20,
-        rest = 10,
+        workTime = 20,
+        restTime = 10,
         rounds = 8
     ),
     Endurance(
         title = UiText.StringResourceId(Res.string.endurance),
-        work = 40,
-        rest = 15,
+        workTime = 40,
+        restTime = 15,
         rounds = 8
     ),
     Quick(
         title = UiText.StringResourceId(Res.string.quick),
-        work = 15,
-        rest = 5,
+        workTime = 15,
+        restTime = 5,
         rounds = 4
     );
 
-    val displayInfo: String
-        get() = "${work}s / ${rest}s / $rounds"
+    val display: String
+        get() = "${workTime}s / ${restTime}s / $rounds"
+
+    fun matches(workTime: Int, restTime: Int, rounds: Int): Boolean {
+        return this.workTime == workTime &&
+                this.restTime == restTime &&
+                this.rounds == rounds
+    }
 }
 
 val defaultPreset = WorkoutPreset.Classic

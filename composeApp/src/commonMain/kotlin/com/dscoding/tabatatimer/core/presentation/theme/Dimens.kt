@@ -5,4 +5,7 @@ import androidx.compose.ui.unit.dp
 object Dimens {
     val ContainerBorderWidth = 1.dp
     val ContainerRoundedCornerShapeSize = 20.dp
+    val SmallSpacing = 10.dp
+    val NormalSpacing = 16.dp
+    val LargeSpacing = 32.dp
 }

@@ -34,34 +34,60 @@ class WorkoutSetupViewModel : ViewModel() {
             initialValue = WorkoutSetupState()
         )
 
-
     fun onAction(action: WorkoutSetupAction) {
         when (action) {
             is WorkoutSetupAction.OnPresetClick -> {
                 _state.update {
                     it.copy(
-                        selectedWorkTime = it.selectedWorkTime?.copy(seconds = action.preset.work),
-                        selectedRestTime = it.selectedRestTime?.copy(seconds = action.preset.rest),
+                        selectedWorkTime = it.selectedWorkTime.copy(seconds = action.preset.workTime),
+                        selectedRestTime = it.selectedRestTime.copy(seconds = action.preset.restTime),
                         selectedRounds = action.preset.rounds
                     )
                 }
             }
 
-            WorkoutSetupAction.OnRestTimeChanged -> {}
-            WorkoutSetupAction.OnRoundsChanged -> {}
-            WorkoutSetupAction.OnStartWorkoutClick -> {
-                viewModelScope.launch {
-                    eventChannel.send(
-                        WorkoutSetupEvent.OnStartWorkout(
-                            work = state.value.selectedWorkTime?.seconds ?: 0,
-                            rest = state.value.selectedRestTime?.seconds ?: 0,
-                            rounds = state.value.selectedRounds ?: 0
+            is WorkoutSetupAction.OnWorkTimeChanged -> {
+                _state.update {
+                    it.copy(
+                        selectedWorkTime = it.selectedWorkTime.copy(
+                            seconds = (it.selectedWorkTime.seconds + action.change.delta)
+                                .coerceAtLeast(1)
                         )
                     )
                 }
             }
 
-            WorkoutSetupAction.OnWorkTimeChanged -> {}
+            is WorkoutSetupAction.OnRestTimeChanged -> {
+                _state.update {
+                    it.copy(
+                        selectedRestTime = it.selectedRestTime.copy(
+                            seconds = (it.selectedRestTime.seconds + action.change.delta)
+                                .coerceAtLeast(1)
+                        )
+                    )
+                }
+            }
+
+            is WorkoutSetupAction.OnRoundsChanged -> {
+                _state.update {
+                    it.copy(
+                        selectedRounds = (it.selectedRounds + action.change.delta)
+                            .coerceAtLeast(1)
+                    )
+                }
+            }
+
+            WorkoutSetupAction.OnStartWorkoutClick -> {
+                viewModelScope.launch {
+                    eventChannel.send(
+                        WorkoutSetupEvent.OnStartWorkout(
+                            workTime = state.value.selectedWorkTime.seconds,
+                            restTime = state.value.selectedRestTime.seconds,
+                            rounds = state.value.selectedRounds
+                        )
+                    )
+                }
+            }
         }
     }
 
@@ -70,10 +96,10 @@ class WorkoutSetupViewModel : ViewModel() {
         _state.update {
             it.copy(
                 selectedWorkTime = TimeUi(
-                    seconds = preset.work,
+                    seconds = preset.workTime,
                 ),
                 selectedRestTime = TimeUi(
-                    seconds = preset.rest,
+                    seconds = preset.restTime,
                 ),
                 selectedRounds = preset.rounds,
             )

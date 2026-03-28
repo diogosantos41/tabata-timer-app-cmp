@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.dscoding.tabatatimer.core.presentation.theme.Dimens.SmallSpacing
 
 @Composable
 fun BarIndicatorLabel(
@@ -22,15 +23,18 @@ fun BarIndicatorLabel(
     isDotAtEnd: Boolean = false,
     modifier: Modifier = Modifier
 ) {
+
+    val indicatorSize = 10.dp
+
     Row(
         modifier = modifier,
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        horizontalArrangement = Arrangement.spacedBy(SmallSpacing),
         verticalAlignment = Alignment.CenterVertically
     ) {
         if (!isDotAtEnd) {
             Box(
                 modifier = Modifier
-                    .size(10.dp)
+                    .size(indicatorSize)
                     .clip(CircleShape)
                     .background(color)
             )
@@ -45,7 +49,7 @@ fun BarIndicatorLabel(
         if (isDotAtEnd) {
             Box(
                 modifier = Modifier
-                    .size(10.dp)
+                    .size(indicatorSize)
                     .clip(CircleShape)
                     .background(color)
             )
