@@ -27,11 +27,11 @@ import com.dscoding.tabatatimer.core.presentation.theme.TabataTimerTheme
 @Composable
 fun WorkRestBar(
     workWeight: Float,
-    restWeight: Float,
     workColor: Color = MaterialTheme.colorScheme.primary,
     restColor: Color = MaterialTheme.colorScheme.secondary,
     modifier: Modifier = Modifier
 ) {
+    val restWeight = 1f - workWeight
     val animatedWorkWeight by animateFloatAsState(
         targetValue = workWeight,
         animationSpec = tween(400),
@@ -90,7 +90,6 @@ private fun WorkRestBarPreview() {
         Box(modifier = Modifier.padding(15.dp)) {
             WorkRestBar(
                 workWeight = 0.8f,
-                restWeight = 0.2f
             )
         }
     }

@@ -32,7 +32,6 @@ fun WorkoutSummary(
     restTimeDisplayText: String,
     total: String,
     workWeight: Float,
-    restWeight: Float,
     modifier: Modifier = Modifier,
 
     ) {
@@ -70,7 +69,6 @@ fun WorkoutSummary(
             Spacer(modifier = Modifier.height(20.dp))
             WorkRestBar(
                 workWeight = workWeight,
-                restWeight = restWeight
             )
         }
     }
@@ -86,7 +84,6 @@ private fun WorkoutSummaryPreview() {
                 restTimeDisplayText = "00:40",
                 total = "03:20",
                 workWeight = 0.66f,
-                restWeight = 0.33f,
                 modifier = Modifier.fillMaxWidth(),
             )
         }

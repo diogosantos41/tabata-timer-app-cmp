@@ -26,6 +26,7 @@ import com.dscoding.tabatatimer.core.presentation.components.TabataSectionHeader
 import com.dscoding.tabatatimer.core.presentation.components.WorkoutSetting
 import com.dscoding.tabatatimer.core.presentation.components.WorkoutSummary
 import com.dscoding.tabatatimer.core.presentation.theme.TabataTimerTheme
+import com.dscoding.tabatatimer.core.presentation.utils.ObserveAsEvents
 import com.dscoding.tabatatimer.workout.presentation.workout_setup.models.TimeUi
 import com.dscoding.tabatatimer.workout.presentation.workout_setup.models.WorkoutPreset
 import org.jetbrains.compose.resources.stringResource
@@ -41,9 +42,20 @@ import tabatatimer.composeapp.generated.resources.workout_summary
 
 @Composable
 fun WorkoutSetupRoot(
-    viewModel: WorkoutSetupViewModel = koinViewModel()
+    viewModel: WorkoutSetupViewModel = koinViewModel(),
+    onStartWorkout: (work: Int, rest: Int, rounds: Int) -> Unit,
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+
+    ObserveAsEvents(viewModel.events) { event ->
+        when (event) {
+            is WorkoutSetupEvent.OnStartWorkout -> onStartWorkout(
+                event.work,
+                event.rest,
+                event.rounds
+            )
+        }
+    }
 
     WorkoutSetupScreen(
         state = state,
@@ -113,11 +125,10 @@ fun WorkoutSetupScreen(
             TabataSectionHeader(text = stringResource(Res.string.workout_summary))
             Spacer(modifier = Modifier.height(16.dp))
             WorkoutSummary(
-                worktimeDisplayText = state.totalWorkTime ?: "",
-                restTimeDisplayText = state.totalRestTime ?: "",
-                total = state.totalWorkoutTime ?: "",
-                workWeight = state.selectedWorkTime?.weight ?: 0.66f,
-                restWeight = state.selectedRestTime?.weight ?: 0.33f,
+                worktimeDisplayText = state.totalWorkTime,
+                restTimeDisplayText = state.totalRestTime,
+                total = state.totalWorkoutTime,
+                workWeight = state.workTimeRatio,
                 modifier = Modifier.fillMaxWidth()
             )
             Spacer(modifier = Modifier.weight(1f))
@@ -142,16 +153,11 @@ private fun Preview() {
             state = WorkoutSetupState(
                 selectedWorkTime = TimeUi(
                     seconds = WorkoutPreset.Classic.work,
-                    weight = 0.7f
                 ),
                 selectedRestTime = TimeUi(
                     seconds = WorkoutPreset.Classic.rest,
-                    weight = 0.3f
                 ),
                 selectedRounds = WorkoutPreset.Classic.rounds,
-                totalWorkoutTime = "02:30",
-                totalRestTime = "01:10",
-                totalWorkTime = "03:40"
             ),
             onAction = {}
         )

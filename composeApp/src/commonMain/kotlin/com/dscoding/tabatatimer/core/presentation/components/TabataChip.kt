@@ -33,7 +33,7 @@ fun TabataChip(
     val containerColor = if (isHighlighted) {
         MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)
     } else {
-        Color.Transparent
+        MaterialTheme.colorScheme.primaryContainer
     }
     val borderColor = if (isHighlighted) {
         MaterialTheme.colorScheme.primary

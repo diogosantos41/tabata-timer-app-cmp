@@ -22,7 +22,11 @@ fun NavigationRoot(
         startDestination = startDestination
     ) {
         composable<NavigationRoute.WorkoutSetup> {
-            WorkoutSetupRoot()
+            WorkoutSetupRoot(
+                onStartWorkout = { work, rest, rounds ->
+                    navController.navigate(NavigationRoute.WorkoutTimer)
+                }
+            )
         }
         composable<NavigationRoute.WorkoutTimer> {
             Box(modifier = Modifier.fillMaxSize().background(Red.copy(alpha = 0.25f)))
