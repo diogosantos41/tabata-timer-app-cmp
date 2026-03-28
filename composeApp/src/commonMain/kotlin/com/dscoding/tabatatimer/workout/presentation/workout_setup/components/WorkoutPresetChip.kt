@@ -1,4 +1,4 @@
-package com.dscoding.tabatatimer.core.presentation.components
+package com.dscoding.tabatatimer.workout.presentation.workout_setup.components
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
@@ -82,7 +82,7 @@ fun TabataChip(
     }
 }
 
-@Preview(showBackground = true)
+@Preview
 @Composable
 private fun TabataChipPreview() {
     TabataTimerTheme {

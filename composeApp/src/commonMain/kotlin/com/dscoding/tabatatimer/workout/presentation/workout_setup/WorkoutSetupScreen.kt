@@ -21,11 +21,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.dscoding.tabatatimer.core.presentation.components.TabataChip
+import com.dscoding.tabatatimer.workout.presentation.workout_setup.components.TabataChip
 import com.dscoding.tabatatimer.core.presentation.components.TabataPrimaryButton
 import com.dscoding.tabatatimer.core.presentation.components.TabataSectionHeader
-import com.dscoding.tabatatimer.core.presentation.components.WorkoutSetting
-import com.dscoding.tabatatimer.core.presentation.components.WorkoutSummary
+import com.dscoding.tabatatimer.workout.presentation.workout_setup.components.WorkoutSetting
+import com.dscoding.tabatatimer.workout.presentation.workout_setup.components.WorkoutSummary
 import com.dscoding.tabatatimer.core.presentation.theme.Dimens.LargeSpacing
 import com.dscoding.tabatatimer.core.presentation.theme.Dimens.NormalSpacing
 import com.dscoding.tabatatimer.core.presentation.theme.Dimens.SmallSpacing
@@ -50,7 +50,7 @@ import tabatatimer.composeapp.generated.resources.workout_summary
 @Composable
 fun WorkoutSetupRoot(
     viewModel: WorkoutSetupViewModel = koinViewModel(),
-    onStartWorkout: (work: Int, rest: Int, rounds: Int) -> Unit,
+    onStartWorkout: (workTime: Int, restTime: Int, rounds: Int) -> Unit,
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 

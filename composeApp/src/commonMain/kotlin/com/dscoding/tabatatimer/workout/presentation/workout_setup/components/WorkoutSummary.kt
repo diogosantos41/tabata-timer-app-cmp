@@ -1,4 +1,4 @@
-package com.dscoding.tabatatimer.core.presentation.components
+package com.dscoding.tabatatimer.workout.presentation.workout_setup.components
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
@@ -17,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.dscoding.tabatatimer.core.presentation.components.WorkoutTimeInfo
 import com.dscoding.tabatatimer.core.presentation.theme.Dimens.ContainerBorderWidth
 import com.dscoding.tabatatimer.core.presentation.theme.Dimens.ContainerRoundedCornerShapeSize
 import com.dscoding.tabatatimer.core.presentation.theme.Dimens.NormalSpacing
@@ -71,6 +72,7 @@ fun WorkoutSummary(
             Spacer(modifier = Modifier.height(NormalSpacing))
             WorkRestBar(
                 workWeight = workWeight,
+                modifier = Modifier.fillMaxWidth()
             )
         }
     }

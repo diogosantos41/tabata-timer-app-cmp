@@ -7,7 +7,11 @@ sealed interface NavigationRoute {
     data object WorkoutSetup : NavigationRoute
 
     @Serializable
-    data object WorkoutTimer : NavigationRoute
+    data class WorkoutSession(
+        val workTime: Int,
+        val restTime: Int,
+        val rounds: Int
+    ) : NavigationRoute
 
     @Serializable
     data object WorkoutFinished : NavigationRoute

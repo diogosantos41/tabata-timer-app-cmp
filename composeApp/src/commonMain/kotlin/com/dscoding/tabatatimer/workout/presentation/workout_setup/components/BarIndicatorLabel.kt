@@ -1,4 +1,4 @@
-package com.dscoding.tabatatimer.core.presentation.components
+package com.dscoding.tabatatimer.workout.presentation.workout_setup.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
