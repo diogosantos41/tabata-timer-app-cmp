@@ -43,6 +43,7 @@ fun WorkoutSummary(
             color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.1f)
         ),
         shape = RoundedCornerShape(size = ContainerRoundedCornerShapeSize),
+        shadowElevation = 1.dp,
         modifier = modifier
             .widthIn(max = 400.dp)
     ) {
