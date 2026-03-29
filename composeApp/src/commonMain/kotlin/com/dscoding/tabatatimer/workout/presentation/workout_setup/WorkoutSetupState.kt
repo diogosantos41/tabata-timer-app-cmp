@@ -5,8 +5,8 @@ import com.dscoding.tabatatimer.workout.presentation.workout_setup.models.TimeUi
 import com.dscoding.tabatatimer.workout.presentation.workout_setup.models.defaultPreset
 
 data class WorkoutSetupState(
-    val selectedWorkTime: TimeUi = TimeUi(defaultPreset.workTime),
-    val selectedRestTime: TimeUi = TimeUi(defaultPreset.restTime),
+    val selectedWorkTime: TimeUi = TimeUi(defaultPreset.workSeconds),
+    val selectedRestTime: TimeUi = TimeUi(defaultPreset.restSeconds),
     val selectedRounds: Int = defaultPreset.rounds,
 ) {
     private val workSecondsTotal: Int
@@ -18,16 +18,16 @@ data class WorkoutSetupState(
     private val workoutSecondsTotal: Int
         get() = workSecondsTotal + restSecondsTotal
 
-    val totalWorkTime: String
+    val formattedTotalWorkSeconds: String
         get() = workSecondsTotal.toTimeFormat()
 
-    val totalRestTime: String
+    val formattedTotalRestSeconds: String
         get() = restSecondsTotal.toTimeFormat()
 
-    val totalWorkoutTime: String
+    val formattedTotalWorkoutSeconds: String
         get() = workoutSecondsTotal.toTimeFormat()
 
-    val workTimeRatio: Float
+    val workRatio: Float
         get() = if (workoutSecondsTotal == 0) 0f
         else workSecondsTotal.toFloat() / workoutSecondsTotal.toFloat()
 }

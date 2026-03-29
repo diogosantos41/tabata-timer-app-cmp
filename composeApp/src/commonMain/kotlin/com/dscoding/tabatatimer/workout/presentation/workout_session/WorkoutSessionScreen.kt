@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.dscoding.tabatatimer.core.presentation.components.TabataBar
+import com.dscoding.tabatatimer.core.presentation.models.WorkoutSessionItem
 import com.dscoding.tabatatimer.core.presentation.theme.Dimens.NormalSpacing
 import com.dscoding.tabatatimer.core.presentation.theme.Dimens.SmallSpacing
 import com.dscoding.tabatatimer.core.presentation.theme.TabataTimerTheme
@@ -29,16 +30,14 @@ import tabatatimer.composeapp.generated.resources.round_progress
 @Composable
 fun WorkoutSessionRoot(
     viewModel: WorkoutSessionViewModel = koinViewModel(),
-    workTime: Int,
-    restTime: Int,
-    rounds: Int,
+    sessionItems: List<WorkoutSessionItem>,
     onWorkoutSessionFinished: () -> Unit,
     onGoBack: () -> Unit
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
-    LaunchedEffect(workTime, restTime, rounds) {
-        viewModel.onAction(WorkoutSessionAction.OnSessionSetup(workTime, restTime, rounds))
+    LaunchedEffect(sessionItems) {
+        viewModel.onAction(WorkoutSessionAction.OnSessionSetup(sessionItems))
     }
 
     WorkoutSessionScreen(

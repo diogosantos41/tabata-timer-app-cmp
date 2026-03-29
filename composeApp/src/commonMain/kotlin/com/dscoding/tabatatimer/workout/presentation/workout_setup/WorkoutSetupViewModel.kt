@@ -2,6 +2,9 @@ package com.dscoding.tabatatimer.workout.presentation.workout_setup
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.dscoding.tabatatimer.core.presentation.models.WorkoutSessionItem
+import com.dscoding.tabatatimer.core.presentation.utils.UiText
+import com.dscoding.tabatatimer.workout.presentation.workout_session.models.WorkoutType
 import com.dscoding.tabatatimer.workout.presentation.workout_setup.models.TimeUi
 import com.dscoding.tabatatimer.workout.presentation.workout_setup.models.defaultPreset
 import kotlinx.coroutines.channels.Channel
@@ -12,6 +15,9 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import tabatatimer.composeapp.generated.resources.Res
+import tabatatimer.composeapp.generated.resources.rest
+import tabatatimer.composeapp.generated.resources.work
 
 class WorkoutSetupViewModel : ViewModel() {
 
@@ -39,14 +45,14 @@ class WorkoutSetupViewModel : ViewModel() {
             is WorkoutSetupAction.OnPresetClick -> {
                 _state.update {
                     it.copy(
-                        selectedWorkTime = it.selectedWorkTime.copy(seconds = action.preset.workTime),
-                        selectedRestTime = it.selectedRestTime.copy(seconds = action.preset.restTime),
+                        selectedWorkTime = it.selectedWorkTime.copy(seconds = action.preset.workSeconds),
+                        selectedRestTime = it.selectedRestTime.copy(seconds = action.preset.restSeconds),
                         selectedRounds = action.preset.rounds
                     )
                 }
             }
 
-            is WorkoutSetupAction.OnWorkTimeChanged -> {
+            is WorkoutSetupAction.OnWorkSecondsChanged -> {
                 _state.update {
                     it.copy(
                         selectedWorkTime = it.selectedWorkTime.copy(
@@ -57,7 +63,7 @@ class WorkoutSetupViewModel : ViewModel() {
                 }
             }
 
-            is WorkoutSetupAction.OnRestTimeChanged -> {
+            is WorkoutSetupAction.OnRestSecondsChanged -> {
                 _state.update {
                     it.copy(
                         selectedRestTime = it.selectedRestTime.copy(
@@ -81,9 +87,11 @@ class WorkoutSetupViewModel : ViewModel() {
                 viewModelScope.launch {
                     eventChannel.send(
                         WorkoutSetupEvent.OnStartWorkout(
-                            workTime = state.value.selectedWorkTime.seconds,
-                            restTime = state.value.selectedRestTime.seconds,
-                            rounds = state.value.selectedRounds
+                            sessionItems = createWorkoutSessionItems(
+                                workSeconds = state.value.selectedWorkTime.seconds,
+                                restSeconds = state.value.selectedRestTime.seconds,
+                                rounds = state.value.selectedRounds
+                            ),
                         )
                     )
                 }
@@ -96,13 +104,41 @@ class WorkoutSetupViewModel : ViewModel() {
         _state.update {
             it.copy(
                 selectedWorkTime = TimeUi(
-                    seconds = preset.workTime,
+                    seconds = preset.workSeconds,
                 ),
                 selectedRestTime = TimeUi(
-                    seconds = preset.restTime,
+                    seconds = preset.restSeconds,
                 ),
                 selectedRounds = preset.rounds,
             )
+        }
+    }
+
+    private fun createWorkoutSessionItems(
+        workSeconds: Int,
+        restSeconds: Int,
+        rounds: Int
+    ): List<WorkoutSessionItem> {
+        return buildList {
+            repeat(rounds) { index ->
+                val round = index + 1
+                add(
+                    WorkoutSessionItem(
+                        description = UiText.Resource(Res.string.work),
+                        seconds = workSeconds,
+                        workoutType = WorkoutType.Work,
+                        round = round
+                    )
+                )
+                add(
+                    WorkoutSessionItem(
+                        description = UiText.Resource(Res.string.rest),
+                        seconds = restSeconds,
+                        workoutType = WorkoutType.Rest,
+                        round = round
+                    )
+                )
+            }
         }
     }
 }

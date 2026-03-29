@@ -5,8 +5,8 @@ import com.dscoding.tabatatimer.workout.presentation.workout_setup.models.Workou
 
 sealed interface WorkoutSetupAction {
     data class OnPresetClick(val preset: WorkoutPreset) : WorkoutSetupAction
-    data class OnWorkTimeChanged(val change: SettingChange) : WorkoutSetupAction
-    data class OnRestTimeChanged(val change: SettingChange) : WorkoutSetupAction
+    data class OnWorkSecondsChanged(val change: SettingChange) : WorkoutSetupAction
+    data class OnRestSecondsChanged(val change: SettingChange) : WorkoutSetupAction
     data class OnRoundsChanged(val change: SettingChange) : WorkoutSetupAction
     data object OnStartWorkoutClick : WorkoutSetupAction
 }

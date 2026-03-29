@@ -6,6 +6,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 
 class WorkoutSessionViewModel : ViewModel() {
 
@@ -28,9 +29,13 @@ class WorkoutSessionViewModel : ViewModel() {
     fun onAction(action: WorkoutSessionAction) {
         when (action) {
             is WorkoutSessionAction.OnSessionSetup -> {
-
+                _state.update {
+                    it.copy(
+                        workoutSessionItems = action.sessionItems
+                    )
+                }
             }
         }
     }
-
 }
+

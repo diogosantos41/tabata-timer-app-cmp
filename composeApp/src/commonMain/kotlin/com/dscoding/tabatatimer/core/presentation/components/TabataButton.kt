@@ -27,7 +27,7 @@ fun ActionButton(
         onClick = onClick,
         colors = ButtonDefaults.buttonColors(
             containerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
-            contentColor = White
+            contentColor = MaterialTheme.colorScheme.primary,
         ),
         border = BorderStroke(
             width = ContainerBorderWidth,
@@ -40,7 +40,6 @@ fun ActionButton(
             text = text.uppercase(),
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.titleSmall,
-            color = MaterialTheme.colorScheme.primary,
         )
     }
 }

@@ -1,6 +1,7 @@
 package com.dscoding.tabatatimer.core.presentation.components
 
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -17,16 +18,17 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.dscoding.tabatatimer.core.presentation.theme.Dimens.ContainerBorderWidth
 import com.dscoding.tabatatimer.core.presentation.theme.Dimens.ContainerRoundedCornerShapeSize
 import com.dscoding.tabatatimer.core.presentation.theme.Dimens.NormalSpacing
 import com.dscoding.tabatatimer.core.presentation.theme.TabataTimerTheme
 
 @Composable
 fun TabataBar(
-     progress: Float,
-     progressColor: Color = MaterialTheme.colorScheme.primary,
-     containerColor: Color = MaterialTheme.colorScheme.primaryContainer,
-     modifier: Modifier = Modifier
+    progress: Float,
+    progressColor: Color = MaterialTheme.colorScheme.primary,
+    containerColor: Color = MaterialTheme.colorScheme.primaryContainer,
+    modifier: Modifier = Modifier
 ) {
     val animatedProgress by animateFloatAsState(
         targetValue = progress,
@@ -37,6 +39,11 @@ fun TabataBar(
         progress = { animatedProgress },
         modifier = modifier
             .height(12.dp)
+            .border(
+                width = ContainerBorderWidth,
+                color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.2f),
+                shape = RoundedCornerShape(ContainerRoundedCornerShapeSize)
+            )
             .clip(RoundedCornerShape(ContainerRoundedCornerShapeSize)),
         color = progressColor,
         trackColor = containerColor,
