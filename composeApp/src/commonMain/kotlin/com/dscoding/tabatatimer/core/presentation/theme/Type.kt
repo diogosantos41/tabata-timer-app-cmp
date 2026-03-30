@@ -68,6 +68,11 @@ val Typography: Typography
             fontFamily = Fonts.OpenSans,
             fontWeight = FontWeight.Bold,
             fontSize = 22.sp,
+        ),
+        headlineLarge = TextStyle(
+            fontFamily = Fonts.OpenSans,
+            fontWeight = FontWeight.Bold,
+            fontSize = 100.sp,
         )
     )
 

@@ -19,9 +19,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.dscoding.tabatatimer.core.presentation.components.TabataBar
 import com.dscoding.tabatatimer.core.presentation.models.WorkoutSessionItem
+import com.dscoding.tabatatimer.core.presentation.theme.Dimens.LargeSpacing
 import com.dscoding.tabatatimer.core.presentation.theme.Dimens.NormalSpacing
 import com.dscoding.tabatatimer.core.presentation.theme.Dimens.SmallSpacing
 import com.dscoding.tabatatimer.core.presentation.theme.TabataTimerTheme
+import com.dscoding.tabatatimer.workout.presentation.workout_session.components.TabataWorkoutTimer
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import tabatatimer.composeapp.generated.resources.Res
@@ -73,6 +75,16 @@ fun WorkoutSessionScreen(
             )
             Spacer(modifier = Modifier.height(SmallSpacing))
             TabataBar(progress = 0.66f, modifier = Modifier.fillMaxWidth())
+            Spacer(modifier = Modifier.height(LargeSpacing))
+            TabataWorkoutTimer(
+                progress = 0.66f,
+                timeRemaining = "00:25",
+                currentWorkout = "Work",
+                nextWorkout = "Rest",
+                color = MaterialTheme.colorScheme.primary,
+                modifier = Modifier
+                    .padding(horizontal = LargeSpacing)
+            )
         }
     }
 }

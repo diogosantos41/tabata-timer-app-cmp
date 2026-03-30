@@ -130,14 +130,16 @@ class WorkoutSetupViewModel : ViewModel() {
                         round = round
                     )
                 )
-                add(
-                    WorkoutSessionItem(
-                        description = UiText.Resource(Res.string.rest),
-                        seconds = restSeconds,
-                        workoutType = WorkoutType.Rest,
-                        round = round
+                if(round < rounds) {
+                    add(
+                        WorkoutSessionItem(
+                            description = UiText.Resource(Res.string.rest),
+                            seconds = restSeconds,
+                            workoutType = WorkoutType.Rest,
+                            round = round
+                        )
                     )
-                )
+                }
             }
         }
     }
