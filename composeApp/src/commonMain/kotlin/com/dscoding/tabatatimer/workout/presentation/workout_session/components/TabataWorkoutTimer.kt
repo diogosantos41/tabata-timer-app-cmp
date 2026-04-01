@@ -1,21 +1,27 @@
 package com.dscoding.tabatatimer.workout.presentation.workout_session.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.dscoding.tabatatimer.core.presentation.theme.Dimens
 import com.dscoding.tabatatimer.core.presentation.theme.Dimens.NormalSpacing
+import com.dscoding.tabatatimer.core.presentation.theme.Dimens.SmallSpacing
 import com.dscoding.tabatatimer.core.presentation.theme.TabataTimerTheme
 import org.jetbrains.compose.resources.stringResource
 import tabatatimer.composeapp.generated.resources.Res
@@ -30,28 +36,41 @@ fun TabataWorkoutTimer(
     color: Color,
     modifier: Modifier = Modifier
 ) {
-    Box(modifier = modifier, contentAlignment = Alignment.Center) {
+    Box(
+        modifier = modifier.aspectRatio(1f),
+        contentAlignment = Alignment.Center
+    ) {
         TabataCircularBar(
             progress = progress,
             progressColor = color,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.matchParentSize()
         )
         Column(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxHeight(),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy((-16).dp)
-        ) {
-            Text(
-                text = currentWorkout.uppercase(),
-                color = color,
-                style = MaterialTheme.typography.titleSmall,
+            verticalArrangement = Arrangement.spacedBy(
+                space = (-6).dp,
+                alignment = Alignment.CenterVertically
             )
+        ) {
+            Box(
+                modifier = modifier
+                    .clip(shape = RoundedCornerShape(Dimens.ContainerRoundedCornerShapeSize))
+                    .background(color.copy(alpha = 0.15f))
+                    .padding(horizontal = NormalSpacing, vertical = SmallSpacing)
+            ) {
+                Text(
+                    text = currentWorkout.uppercase(),
+                    color = color,
+                    style = MaterialTheme.typography.titleSmall,
+                )
+            }
             Text(
                 text = timeRemaining,
                 color = MaterialTheme.colorScheme.onBackground,
                 style = MaterialTheme.typography.headlineLarge,
             )
-            Spacer(modifier = Modifier.height(24.dp))
+<            Spacer(modifier = Modifier.height(SmallSpacing))
             Text(
                 text = stringResource(
                     Res.string.next_workout,
@@ -60,6 +79,7 @@ fun TabataWorkoutTimer(
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 style = MaterialTheme.typography.labelLarge,
             )
+            Spacer(modifier = Modifier.height(NormalSpacing))
         }
     }
 }
@@ -74,7 +94,6 @@ private fun TabataWorkoutTimerPreview() {
             currentWorkout = "Work",
             nextWorkout = "Rest",
             color = MaterialTheme.colorScheme.primary,
-            modifier = Modifier.fillMaxWidth()
         )
     }
 }

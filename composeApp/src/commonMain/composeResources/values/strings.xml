@@ -16,4 +16,9 @@
     <string name="start_workout">Start Workout</string>
     <string name="round_progress">Round %1$d / %2$d</string>
     <string name="next_workout">Next: %1$s</string>
+    <string name="starting">Starting</string>
+    <string name="pause">Pause</string>
+    <string name="resume">Resume</string>
+    <string name="stop_workout_session">Stop Workout Session</string>
+    <string name="skip_exercise">Skip Exercise</string>
 </resources>

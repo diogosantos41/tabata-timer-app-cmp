@@ -24,19 +24,15 @@ fun NavigationRoot(
     ) {
         composable<NavigationRoute.WorkoutSetup> {
             WorkoutSetupRoot(
-                onStartWorkout = { sessionItems ->
+                onStartWorkout = {
                     navController.navigate(
-                        NavigationRoute.WorkoutSession(
-                            sessionItems = sessionItems
-                        )
+                        NavigationRoute.WorkoutSession
                     )
                 }
             )
         }
         composable<NavigationRoute.WorkoutSession> {
-            val route = it.toRoute<NavigationRoute.WorkoutSession>()
             WorkoutSessionRoot(
-                sessionItems = route.sessionItems,
                 onWorkoutSessionFinished = {
                     navController.navigate(NavigationRoute.WorkoutFinished)
                 },

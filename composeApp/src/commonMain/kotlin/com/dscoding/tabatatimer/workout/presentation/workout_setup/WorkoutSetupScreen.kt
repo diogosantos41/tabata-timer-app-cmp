@@ -51,15 +51,13 @@ import tabatatimer.composeapp.generated.resources.workout_summary
 @Composable
 fun WorkoutSetupRoot(
     viewModel: WorkoutSetupViewModel = koinViewModel(),
-    onStartWorkout: (List<WorkoutSessionItem>) -> Unit,
+    onStartWorkout: () -> Unit,
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     ObserveAsEvents(viewModel.events) { event ->
         when (event) {
-            is WorkoutSetupEvent.OnStartWorkout -> onStartWorkout(
-                event.sessionItems
-            )
+            is WorkoutSetupEvent.OnStartWorkout -> onStartWorkout()
         }
     }
 

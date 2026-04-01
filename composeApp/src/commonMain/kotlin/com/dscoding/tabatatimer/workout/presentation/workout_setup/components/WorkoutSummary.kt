@@ -18,10 +18,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.dscoding.tabatatimer.core.presentation.components.WorkoutTimeInfo
+import com.dscoding.tabatatimer.core.presentation.models.WorkoutType
 import com.dscoding.tabatatimer.core.presentation.theme.Dimens.ContainerBorderWidth
 import com.dscoding.tabatatimer.core.presentation.theme.Dimens.ContainerRoundedCornerShapeSize
 import com.dscoding.tabatatimer.core.presentation.theme.Dimens.NormalSpacing
 import com.dscoding.tabatatimer.core.presentation.theme.TabataTimerTheme
+import com.dscoding.tabatatimer.core.presentation.utils.color
 import org.jetbrains.compose.resources.stringResource
 import tabatatimer.composeapp.generated.resources.Res
 import tabatatimer.composeapp.generated.resources.rest_time
@@ -56,12 +58,12 @@ fun WorkoutSummary(
                 WorkoutTimeInfo(
                     displayTime = worktimeDisplayText,
                     description = stringResource(Res.string.work_time),
-                    color = MaterialTheme.colorScheme.primary
+                    color = WorkoutType.Work.color()
                 )
                 WorkoutTimeInfo(
                     displayTime = restTimeDisplayText,
                     description = stringResource(Res.string.rest_time),
-                    color = MaterialTheme.colorScheme.secondary
+                    color = WorkoutType.Rest.color()
                 )
                 WorkoutTimeInfo(
                     displayTime = total,
@@ -72,6 +74,8 @@ fun WorkoutSummary(
             Spacer(modifier = Modifier.height(NormalSpacing))
             WorkRestBar(
                 workWeight = workWeight,
+                workColor = WorkoutType.Work.color(),
+                restColor = WorkoutType.Rest.color(),
                 modifier = Modifier.fillMaxWidth()
             )
         }

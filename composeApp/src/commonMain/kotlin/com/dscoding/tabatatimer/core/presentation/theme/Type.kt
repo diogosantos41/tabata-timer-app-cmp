@@ -72,7 +72,7 @@ val Typography: Typography
         headlineLarge = TextStyle(
             fontFamily = Fonts.OpenSans,
             fontWeight = FontWeight.Bold,
-            fontSize = 100.sp,
+<            fontSize = 90.sp,
         )
     )
 

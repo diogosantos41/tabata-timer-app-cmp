@@ -2,9 +2,7 @@ package com.dscoding.tabatatimer.workout.presentation.workout_setup
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.dscoding.tabatatimer.core.presentation.models.WorkoutSessionItem
-import com.dscoding.tabatatimer.core.presentation.utils.UiText
-import com.dscoding.tabatatimer.workout.presentation.workout_session.models.WorkoutType
+import com.dscoding.tabatatimer.workout.presentation.WorkoutSessionCoordinator
 import com.dscoding.tabatatimer.workout.presentation.workout_setup.models.TimeUi
 import com.dscoding.tabatatimer.workout.presentation.workout_setup.models.defaultPreset
 import kotlinx.coroutines.channels.Channel
@@ -15,11 +13,10 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import tabatatimer.composeapp.generated.resources.Res
-import tabatatimer.composeapp.generated.resources.rest
-import tabatatimer.composeapp.generated.resources.work
 
-class WorkoutSetupViewModel : ViewModel() {
+class WorkoutSetupViewModel(
+    private val sessionCoordinator: WorkoutSessionCoordinator
+) : ViewModel() {
 
     private var hasLoadedInitialData = false
 
@@ -84,15 +81,14 @@ class WorkoutSetupViewModel : ViewModel() {
             }
 
             WorkoutSetupAction.OnStartWorkoutClick -> {
+                sessionCoordinator.buildSetWorkoutSession(
+                    workSeconds = state.value.selectedWorkTime.seconds,
+                    restSeconds = state.value.selectedRestTime.seconds,
+                    rounds = state.value.selectedRounds
+                )
                 viewModelScope.launch {
                     eventChannel.send(
-                        WorkoutSetupEvent.OnStartWorkout(
-                            sessionItems = createWorkoutSessionItems(
-                                workSeconds = state.value.selectedWorkTime.seconds,
-                                restSeconds = state.value.selectedRestTime.seconds,
-                                rounds = state.value.selectedRounds
-                            ),
-                        )
+                        WorkoutSetupEvent.OnStartWorkout
                     )
                 }
             }
@@ -111,36 +107,6 @@ class WorkoutSetupViewModel : ViewModel() {
                 ),
                 selectedRounds = preset.rounds,
             )
-        }
-    }
-
-    private fun createWorkoutSessionItems(
-        workSeconds: Int,
-        restSeconds: Int,
-        rounds: Int
-    ): List<WorkoutSessionItem> {
-        return buildList {
-            repeat(rounds) { index ->
-                val round = index + 1
-                add(
-                    WorkoutSessionItem(
-                        description = UiText.Resource(Res.string.work),
-                        seconds = workSeconds,
-                        workoutType = WorkoutType.Work,
-                        round = round
-                    )
-                )
-                if(round < rounds) {
-                    add(
-                        WorkoutSessionItem(
-                            description = UiText.Resource(Res.string.rest),
-                            seconds = restSeconds,
-                            workoutType = WorkoutType.Rest,
-                            round = round
-                        )
-                    )
-                }
-            }
         }
     }
 }

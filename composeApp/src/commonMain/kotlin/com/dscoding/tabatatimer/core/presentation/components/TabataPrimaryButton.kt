@@ -16,6 +16,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextAlign
@@ -29,13 +30,14 @@ import com.dscoding.tabatatimer.core.presentation.theme.TabataTimerTheme
 fun TabataPrimaryButton(
     text: String,
     onClick: () -> Unit,
+    color: Color = MaterialTheme.colorScheme.primary,
     iconImageVector: ImageVector? = null,
     modifier: Modifier = Modifier,
 ) {
     Button(
         onClick = onClick,
         colors = ButtonDefaults.buttonColors(
-            containerColor = MaterialTheme.colorScheme.primary,
+            containerColor = color,
             contentColor = MaterialTheme.colorScheme.onPrimary
         ),
         shape = RoundedCornerShape(size = ContainerRoundedCornerShapeSize),

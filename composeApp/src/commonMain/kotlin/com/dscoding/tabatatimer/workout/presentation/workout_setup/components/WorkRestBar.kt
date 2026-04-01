@@ -33,7 +33,8 @@ fun WorkRestBar(
     Column {
         TabataBar(
             progress = workWeight,
-            containerColor = MaterialTheme.colorScheme.secondary,
+            progressColor = workColor,
+            containerColor = restColor,
             modifier = Modifier.fillMaxWidth()
         )
         Spacer(modifier = Modifier.height(NormalSpacing))

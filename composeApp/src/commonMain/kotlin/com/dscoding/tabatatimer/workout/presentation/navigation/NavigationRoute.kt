@@ -1,6 +1,5 @@
 package com.dscoding.tabatatimer.workout.presentation.navigation
 
-import com.dscoding.tabatatimer.core.presentation.models.WorkoutSessionItem
 import kotlinx.serialization.Serializable
 
 sealed interface NavigationRoute {
@@ -8,9 +7,7 @@ sealed interface NavigationRoute {
     data object WorkoutSetup : NavigationRoute
 
     @Serializable
-    data class WorkoutSession(
-        val sessionItems: List<WorkoutSessionItem>
-    ) : NavigationRoute
+    data object WorkoutSession : NavigationRoute
 
     @Serializable
     data object WorkoutFinished : NavigationRoute

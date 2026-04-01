@@ -1,6 +1,8 @@
 package com.dscoding.tabatatimer.workout.presentation.workout_session
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -8,39 +10,48 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Pause
+import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material.icons.filled.SkipNext
+import androidx.compose.material.icons.filled.Stop
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.dscoding.tabatatimer.core.presentation.components.TabataBar
-import com.dscoding.tabatatimer.core.presentation.models.WorkoutSessionItem
+import com.dscoding.tabatatimer.core.presentation.components.TabataIconButton
+import com.dscoding.tabatatimer.core.presentation.components.TabataPrimaryButton
+import com.dscoding.tabatatimer.core.presentation.models.WorkoutType
 import com.dscoding.tabatatimer.core.presentation.theme.Dimens.LargeSpacing
 import com.dscoding.tabatatimer.core.presentation.theme.Dimens.NormalSpacing
 import com.dscoding.tabatatimer.core.presentation.theme.Dimens.SmallSpacing
 import com.dscoding.tabatatimer.core.presentation.theme.TabataTimerTheme
+import com.dscoding.tabatatimer.core.presentation.utils.UiText
+import com.dscoding.tabatatimer.core.presentation.utils.color
+import com.dscoding.tabatatimer.core.presentation.utils.toTimeFormat
 import com.dscoding.tabatatimer.workout.presentation.workout_session.components.TabataWorkoutTimer
+import com.dscoding.tabatatimer.workout.presentation.workout_session.models.TimerPlayState
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import tabatatimer.composeapp.generated.resources.Res
 import tabatatimer.composeapp.generated.resources.round_progress
+import tabatatimer.composeapp.generated.resources.skip_exercise
+import tabatatimer.composeapp.generated.resources.stop_workout_session
 
 @Composable
 fun WorkoutSessionRoot(
     viewModel: WorkoutSessionViewModel = koinViewModel(),
-    sessionItems: List<WorkoutSessionItem>,
     onWorkoutSessionFinished: () -> Unit,
     onGoBack: () -> Unit
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
-
-    LaunchedEffect(sessionItems) {
-        viewModel.onAction(WorkoutSessionAction.OnSessionSetup(sessionItems))
-    }
 
     WorkoutSessionScreen(
         state = state,
@@ -62,29 +73,56 @@ fun WorkoutSessionScreen(
                 .padding(paddingValues)
                 .padding(horizontal = NormalSpacing)
                 .verticalScroll(scrollState),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Spacer(modifier = Modifier.height(NormalSpacing))
+            Spacer(modifier = Modifier.height(LargeSpacing))
             Text(
                 text = stringResource(
                     Res.string.round_progress,
-                    2,
-                    6
+                    state.currentRound,
+                    state.rounds
                 ),
                 style = MaterialTheme.typography.titleSmall,
                 color = MaterialTheme.colorScheme.onBackground,
+                textAlign = TextAlign.Start,
+                modifier = Modifier.fillMaxWidth()
             )
             Spacer(modifier = Modifier.height(SmallSpacing))
-            TabataBar(progress = 0.66f, modifier = Modifier.fillMaxWidth())
-            Spacer(modifier = Modifier.height(LargeSpacing))
+            TabataBar(progress = state.roundProgress, modifier = Modifier.fillMaxWidth())
+            Spacer(modifier = Modifier.weight(0.5f))
             TabataWorkoutTimer(
-                progress = 0.66f,
-                timeRemaining = "00:25",
-                currentWorkout = "Work",
-                nextWorkout = "Rest",
-                color = MaterialTheme.colorScheme.primary,
-                modifier = Modifier
-                    .padding(horizontal = LargeSpacing)
+                progress = state.timeProgress,
+                timeRemaining = state.roundSecondsRemaining.toTimeFormat(),
+                currentWorkout = state.currentWorkoutDescription.asString(),
+                nextWorkout = state.nextWorkoutDescription.asString(),
+                color = state.currentWorkoutType.color(),
             )
+            Spacer(modifier = Modifier.weight(0.5f))
+            Row(
+                modifier = Modifier.fillMaxWidth().padding(vertical = LargeSpacing),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                TabataIconButton(
+                    iconImageVector = Icons.Default.Stop,
+                    contentDescription = stringResource(Res.string.stop_workout_session),
+                    onClick = { onAction(WorkoutSessionAction.OnStopWorkoutClick) }
+                )
+                TabataPrimaryButton(
+                    text = state.pausePlayButtonText.asString(),
+                    onClick = { onAction(WorkoutSessionAction.OnResumePauseClick) },
+                    color = state.currentWorkoutType.color(),
+                    iconImageVector =
+                        if (state.currentTimerPlayState == TimerPlayState.Running)
+                            Icons.Default.Pause
+                        else
+                            Icons.Default.PlayArrow
+                )
+                TabataIconButton(
+                    iconImageVector = Icons.Default.SkipNext,
+                    contentDescription = stringResource(Res.string.skip_exercise),
+                    onClick = { onAction(WorkoutSessionAction.OnSkipExerciseClick) }
+                )
+            }
         }
     }
 }
@@ -94,7 +132,16 @@ fun WorkoutSessionScreen(
 private fun WorkoutSessionScreenPreview() {
     TabataTimerTheme {
         WorkoutSessionScreen(
-            state = WorkoutSessionState(),
+            state = WorkoutSessionState(
+                currentRound = 3,
+                rounds = 10,
+                currentTimerPlayState = TimerPlayState.Running,
+                currentWorkoutDescription = UiText.DynamicString("Work"),
+                currentWorkoutType = WorkoutType.Work,
+                nextWorkoutDescription = UiText.DynamicString("Finished"),
+                roundSecondsRemaining = 10,
+                roundTotalSeconds = 30
+            ),
             onAction = {}
         )
     }
