@@ -28,11 +28,13 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.dscoding.tabatatimer.core.presentation.components.TabataBar
 import com.dscoding.tabatatimer.core.presentation.components.TabataIconButton
 import com.dscoding.tabatatimer.core.presentation.components.TabataPrimaryButton
+import com.dscoding.tabatatimer.core.presentation.models.WorkoutSessionItem
 import com.dscoding.tabatatimer.core.presentation.models.WorkoutType
 import com.dscoding.tabatatimer.core.presentation.theme.Dimens.LargeSpacing
 import com.dscoding.tabatatimer.core.presentation.theme.Dimens.NormalSpacing
 import com.dscoding.tabatatimer.core.presentation.theme.Dimens.SmallSpacing
 import com.dscoding.tabatatimer.core.presentation.theme.TabataTimerTheme
+import com.dscoding.tabatatimer.core.presentation.utils.ObserveAsEvents
 import com.dscoding.tabatatimer.core.presentation.utils.UiText
 import com.dscoding.tabatatimer.core.presentation.utils.color
 import com.dscoding.tabatatimer.core.presentation.utils.toTimeFormat
@@ -43,7 +45,9 @@ import org.koin.compose.viewmodel.koinViewModel
 import tabatatimer.composeapp.generated.resources.Res
 import tabatatimer.composeapp.generated.resources.round_progress
 import tabatatimer.composeapp.generated.resources.skip_exercise
+import tabatatimer.composeapp.generated.resources.starting
 import tabatatimer.composeapp.generated.resources.stop_workout_session
+import tabatatimer.composeapp.generated.resources.work
 
 @Composable
 fun WorkoutSessionRoot(
@@ -52,6 +56,13 @@ fun WorkoutSessionRoot(
     onGoBack: () -> Unit
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+
+    ObserveAsEvents(viewModel.events) { event ->
+        when (event) {
+            WorkoutSessionEvent.SessionCompleted -> onWorkoutSessionFinished()
+            WorkoutSessionEvent.StopWorkout -> onGoBack()
+        }
+    }
 
     WorkoutSessionScreen(
         state = state,
@@ -79,7 +90,7 @@ fun WorkoutSessionScreen(
             Text(
                 text = stringResource(
                     Res.string.round_progress,
-                    state.currentRound,
+                    state.currentWorkoutSessionItem.round,
                     state.rounds
                 ),
                 style = MaterialTheme.typography.titleSmall,
@@ -93,9 +104,9 @@ fun WorkoutSessionScreen(
             TabataWorkoutTimer(
                 progress = state.timeProgress,
                 timeRemaining = state.roundSecondsRemaining.toTimeFormat(),
-                currentWorkout = state.currentWorkoutDescription.asString(),
+                currentWorkout = state.currentWorkoutSessionItem.description.asString(),
                 nextWorkout = state.nextWorkoutDescription.asString(),
-                color = state.currentWorkoutType.color(),
+                color = state.currentWorkoutSessionItem.workoutType.color(),
             )
             Spacer(modifier = Modifier.weight(0.5f))
             Row(
@@ -110,7 +121,7 @@ fun WorkoutSessionScreen(
                 TabataPrimaryButton(
                     text = state.pausePlayButtonText.asString(),
                     onClick = { onAction(WorkoutSessionAction.OnResumePauseClick) },
-                    color = state.currentWorkoutType.color(),
+                    color = state.currentWorkoutSessionItem.workoutType.color(),
                     iconImageVector =
                         if (state.currentTimerPlayState == TimerPlayState.Running)
                             Icons.Default.Pause
@@ -133,14 +144,16 @@ private fun WorkoutSessionScreenPreview() {
     TabataTimerTheme {
         WorkoutSessionScreen(
             state = WorkoutSessionState(
-                currentRound = 3,
                 rounds = 10,
+                currentWorkoutSessionItem = WorkoutSessionItem(
+                    description = UiText.Resource(Res.string.work),
+                    seconds = 120,
+                    workoutType = WorkoutType.Work,
+                    round = 1
+                ),
                 currentTimerPlayState = TimerPlayState.Running,
-                currentWorkoutDescription = UiText.DynamicString("Work"),
-                currentWorkoutType = WorkoutType.Work,
                 nextWorkoutDescription = UiText.DynamicString("Finished"),
                 roundSecondsRemaining = 10,
-                roundTotalSeconds = 30
             ),
             onAction = {}
         )

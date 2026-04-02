@@ -70,7 +70,7 @@ fun TabataWorkoutTimer(
                 color = MaterialTheme.colorScheme.onBackground,
                 style = MaterialTheme.typography.headlineLarge,
             )
-<            Spacer(modifier = Modifier.height(SmallSpacing))
+            Spacer(modifier = Modifier.height(SmallSpacing))
             Text(
                 text = stringResource(
                     Res.string.next_workout,
