@@ -23,4 +23,22 @@
     <string name="resume">Resume</string>
     <string name="stop_workout_session">Stop Workout Session</string>
     <string name="skip_exercise">Skip Exercise</string>
+    <string name="go_again">Go Again</string>
+    <string name="setup_new_workout">Setup New Workout</string>
+
+    <string name="workout_msg_1">You crushed it! 💪</string>
+    <string name="workout_msg_2">Nice work! 🔥</string>
+    <string name="workout_msg_3">You did it! 🎉</string>
+    <string name="workout_msg_4">Great session! 👏</string>
+    <string name="workout_msg_5">Keep it up! 🔥</string>
+    <string name="workout_msg_6">Well done! 👏</string>
+    <string name="workout_msg_7">Solid workout! 💥</string>
+    <string name="workout_msg_8">You nailed it! 💯</string>
+    <string name="workout_msg_9">Strong finish! 💪</string>
+    <string name="workout_msg_10">Awesome job! 💯</string>
+    <string name="workout_msg_11">Proud of you! 👏</string>
+    <string name="workout_msg_12">That was great! 🔥</string>
+    <string name="workout_msg_13">You smashed it! 🔥</string>
+    <string name="workout_msg_14">Keep going! 👏</string>
+    <string name="workout_msg_15">Nice effort 💯</string>
 </resources>

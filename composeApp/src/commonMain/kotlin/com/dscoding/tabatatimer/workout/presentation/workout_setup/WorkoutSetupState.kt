@@ -13,7 +13,7 @@ data class WorkoutSetupState(
         get() = selectedWorkTime.seconds * selectedRounds
 
     private val restSecondsTotal: Int
-        get() = selectedRestTime.seconds * selectedRounds
+        get() = selectedRestTime.seconds * (selectedRounds - 1).coerceAtLeast(0)
 
     private val workoutSecondsTotal: Int
         get() = workSecondsTotal + restSecondsTotal

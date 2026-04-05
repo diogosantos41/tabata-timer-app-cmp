@@ -84,7 +84,7 @@ class WorkoutSessionViewModel(
     }
 
     private fun setupSession() {
-        workoutSessionItems = sessionStore.getSessionItems().orEmpty()
+        workoutSessionItems = sessionStore.getWorkoutSession()?.items.orEmpty()
         currentSessionIndex = 0
         updateCurrentSessionState()
     }
@@ -147,7 +147,6 @@ class WorkoutSessionViewModel(
 
     private fun finishWorkout() {
         countdownTimer.stop()
-        sessionStore.clearSession()
         viewModelScope.launch {
             eventChannel.send(WorkoutSessionEvent.SessionCompleted)
         }

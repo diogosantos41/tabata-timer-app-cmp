@@ -1,5 +1,6 @@
 package com.dscoding.tabatatimer.workout.presentation.util
 
+import com.dscoding.tabatatimer.core.presentation.models.WorkoutSession
 import com.dscoding.tabatatimer.core.presentation.models.WorkoutSessionItem
 import com.dscoding.tabatatimer.core.presentation.models.WorkoutType
 import com.dscoding.tabatatimer.core.presentation.utils.UiText
@@ -14,8 +15,8 @@ class WorkoutSessionFactory {
         workSeconds: Int,
         restSeconds: Int,
         rounds: Int
-    ): List<WorkoutSessionItem> {
-        return buildList {
+    ): WorkoutSession {
+        return WorkoutSession(items = buildList {
             add(
                 WorkoutSessionItem(
                     description = UiText.Resource(Res.string.starting),
@@ -48,6 +49,6 @@ class WorkoutSessionFactory {
                     )
                 }
             }
-        }
+        })
     }
 }

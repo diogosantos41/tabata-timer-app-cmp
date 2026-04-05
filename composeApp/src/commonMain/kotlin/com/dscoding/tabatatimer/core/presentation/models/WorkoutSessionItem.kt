@@ -3,7 +3,6 @@ package com.dscoding.tabatatimer.core.presentation.models
 import com.dscoding.tabatatimer.core.presentation.utils.UiText
 import kotlinx.serialization.Serializable
 
-@Serializable
 data class WorkoutSessionItem(
     val description: UiText,
     val seconds: Int,

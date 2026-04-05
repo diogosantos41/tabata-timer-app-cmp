@@ -83,12 +83,12 @@ class WorkoutSetupViewModel(
             }
 
             WorkoutSetupAction.OnStartWorkoutClick -> {
-                val workoutSessionList = sessionBuilder.buildWorkoutSession(
+                val workoutSession = sessionBuilder.buildWorkoutSession(
                     workSeconds = state.value.selectedWorkTime.seconds,
                     restSeconds = state.value.selectedRestTime.seconds,
                     rounds = state.value.selectedRounds
                 )
-                sessionStore.setSessionItems(workoutSessionList)
+                sessionStore.setWorkoutSession(workoutSession)
                 viewModelScope.launch {
                     eventChannel.send(
                         WorkoutSetupEvent.OnStartWorkout

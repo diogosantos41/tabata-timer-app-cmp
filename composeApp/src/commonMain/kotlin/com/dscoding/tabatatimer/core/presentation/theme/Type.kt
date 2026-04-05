@@ -69,23 +69,14 @@ val Typography: Typography
             fontWeight = FontWeight.Bold,
             fontSize = 22.sp,
         ),
+        headlineMedium = TextStyle(
+            fontFamily = Fonts.OpenSans,
+            fontWeight = FontWeight.Bold,
+            fontSize = 30.sp,
+        ),
         headlineLarge = TextStyle(
             fontFamily = Fonts.OpenSans,
             fontWeight = FontWeight.Bold,
             fontSize = 90.sp,
         )
     )
-
-@Preview(showBackground = true)
-@Composable
-private fun TypographyPreview() {
-    TabataTimerTheme {
-        Column(
-            modifier = Modifier.padding(SmallSpacing),
-            verticalArrangement = Arrangement.spacedBy(NormalSpacing)
-        ) {
-            Text(text = "body medium", style = MaterialTheme.typography.bodyMedium)
-            Text(text = "title small", style = MaterialTheme.typography.titleSmall)
-        }
-    }
-}

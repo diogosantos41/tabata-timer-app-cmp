@@ -1,17 +1,17 @@
 package com.dscoding.tabatatimer.workout.presentation.util
 
-import com.dscoding.tabatatimer.core.presentation.models.WorkoutSessionItem
+import com.dscoding.tabatatimer.core.presentation.models.WorkoutSession
 
 class WorkoutSessionStore {
-    private var currentSessionItems: List<WorkoutSessionItem>? = null
+    private var currentSession: WorkoutSession? = null
 
-    fun setSessionItems(items: List<WorkoutSessionItem>) {
-        currentSessionItems = items
+    fun setWorkoutSession(session: WorkoutSession) {
+        currentSession = session
     }
 
-    fun getSessionItems(): List<WorkoutSessionItem>? = currentSessionItems
+    fun getWorkoutSession(): WorkoutSession? = currentSession
 
     fun clearSession() {
-        currentSessionItems = null
+        currentSession = null
     }
 }
