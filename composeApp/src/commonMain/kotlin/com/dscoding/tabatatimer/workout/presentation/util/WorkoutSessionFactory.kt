@@ -1,22 +1,21 @@
-package com.dscoding.tabatatimer.workout.presentation
+package com.dscoding.tabatatimer.workout.presentation.util
 
 import com.dscoding.tabatatimer.core.presentation.models.WorkoutSessionItem
-import com.dscoding.tabatatimer.core.presentation.utils.UiText
 import com.dscoding.tabatatimer.core.presentation.models.WorkoutType
+import com.dscoding.tabatatimer.core.presentation.utils.UiText
 import tabatatimer.composeapp.generated.resources.Res
 import tabatatimer.composeapp.generated.resources.rest
 import tabatatimer.composeapp.generated.resources.starting
 import tabatatimer.composeapp.generated.resources.work
 
-class WorkoutSessionCoordinator {
-    private var currentSessionItems: List<WorkoutSessionItem>? = null
+class WorkoutSessionFactory {
 
-    fun buildSetWorkoutSession(
+    fun buildWorkoutSession(
         workSeconds: Int,
         restSeconds: Int,
         rounds: Int
-    ) {
-        currentSessionItems = buildList {
+    ): List<WorkoutSessionItem> {
+        return buildList {
             add(
                 WorkoutSessionItem(
                     description = UiText.Resource(Res.string.starting),
@@ -25,8 +24,10 @@ class WorkoutSessionCoordinator {
                     round = 1
                 )
             )
+
             repeat(rounds) { index ->
                 val round = index + 1
+
                 add(
                     WorkoutSessionItem(
                         description = UiText.Resource(Res.string.work),
@@ -35,6 +36,7 @@ class WorkoutSessionCoordinator {
                         round = round
                     )
                 )
+
                 if (round < rounds) {
                     add(
                         WorkoutSessionItem(
@@ -47,11 +49,5 @@ class WorkoutSessionCoordinator {
                 }
             }
         }
-    }
-
-    fun getSessionItems(): List<WorkoutSessionItem>? = currentSessionItems
-
-    fun clearSession() {
-        currentSessionItems = null
     }
 }

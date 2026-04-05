@@ -37,24 +37,26 @@ fun TabataWorkoutTimer(
     modifier: Modifier = Modifier
 ) {
     Box(
-        modifier = modifier.aspectRatio(1f),
+        modifier = modifier
+            .aspectRatio(1f),
         contentAlignment = Alignment.Center
     ) {
         TabataCircularBar(
             progress = progress,
             progressColor = color,
+            containerColor = color.copy(alpha = 0.15f),
             modifier = Modifier.matchParentSize()
         )
         Column(
             modifier = Modifier.fillMaxHeight(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(
-                space = (-6).dp,
+                space = (-4).dp,
                 alignment = Alignment.CenterVertically
             )
         ) {
             Box(
-                modifier = modifier
+                modifier = Modifier
                     .clip(shape = RoundedCornerShape(Dimens.ContainerRoundedCornerShapeSize))
                     .background(color.copy(alpha = 0.15f))
                     .padding(horizontal = NormalSpacing, vertical = SmallSpacing)
@@ -70,7 +72,6 @@ fun TabataWorkoutTimer(
                 color = MaterialTheme.colorScheme.onBackground,
                 style = MaterialTheme.typography.headlineLarge,
             )
-            Spacer(modifier = Modifier.height(SmallSpacing))
             Text(
                 text = stringResource(
                     Res.string.next_workout,
@@ -90,7 +91,7 @@ private fun TabataWorkoutTimerPreview() {
     TabataTimerTheme {
         TabataWorkoutTimer(
             progress = 0.66f,
-            timeRemaining = "00:25",
+            timeRemaining = "25",
             currentWorkout = "Work",
             nextWorkout = "Rest",
             color = MaterialTheme.colorScheme.primary,

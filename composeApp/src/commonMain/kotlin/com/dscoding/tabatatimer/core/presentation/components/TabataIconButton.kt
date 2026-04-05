@@ -38,7 +38,7 @@ fun TabataIconButton(
             .size(60.dp)
             .border(
                 width = ContainerBorderWidth,
-                color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.1f),
+                color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.4f),
                 shape = RoundedCornerShape(size = ContainerRoundedCornerShapeSize)
             ),
     ) {

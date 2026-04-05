@@ -1,21 +1,28 @@
 package com.dscoding.tabatatimer.workout.data.timer
+
 import com.dscoding.tabatatimer.workout.domain.CountdownTimer
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import kotlin.time.TimeSource
 
 class DefaultCountdownTimer(
     private val applicationScope: CoroutineScope
 ) : CountdownTimer {
 
-    private val _remainingSeconds = MutableStateFlow<Int?>(null)
-    override val remainingSeconds = _remainingSeconds.asStateFlow()
+    private val _remainingMillis = MutableStateFlow<Long?>(null)
+    override val remainingMillis = _remainingMillis.asStateFlow()
 
     private var timerJob: Job? = null
     private var onComplete: (() -> Unit)? = null
+
+    private var remainingMillisOnPause: Long = 0L
+    private var startedAt = TimeSource.Monotonic.markNow()
 
     override fun start(
         totalSeconds: Int,
@@ -24,19 +31,25 @@ class DefaultCountdownTimer(
         stop()
 
         this.onComplete = onComplete
-        _remainingSeconds.value = totalSeconds
+        remainingMillisOnPause = totalSeconds.coerceAtLeast(0) * 1000L
+        _remainingMillis.value = remainingMillisOnPause
+        startedAt = TimeSource.Monotonic.markNow()
 
         runTimer()
     }
 
     override fun pause() {
+        remainingMillisOnPause = currentRemainingMillis().coerceAtLeast(0L)
+
         timerJob?.cancel()
         timerJob = null
     }
 
     override fun resume() {
-        val currentRemaining = _remainingSeconds.value ?: return
-        if (currentRemaining <= 0 || timerJob != null) return
+        if (remainingMillisOnPause <= 0L || timerJob != null) return
+
+        startedAt = TimeSource.Monotonic.markNow()
+        _remainingMillis.value = remainingMillisOnPause
 
         runTimer()
     }
@@ -44,33 +57,33 @@ class DefaultCountdownTimer(
     override fun stop() {
         timerJob?.cancel()
         timerJob = null
-        _remainingSeconds.value = null
+        _remainingMillis.value = null
         onComplete = null
+        remainingMillisOnPause = 0L
     }
 
     private fun runTimer() {
         timerJob?.cancel()
         timerJob = applicationScope.launch {
-            while (true) {
-                val currentRemaining = _remainingSeconds.value ?: break
+            while (currentCoroutineContext().isActive) {
+                val remainingMillis = currentRemainingMillis()
 
-                if (currentRemaining <= 0) {
-                    onComplete?.invoke()
+                if (remainingMillis <= 0L) {
+                    _remainingMillis.value = 0L
                     timerJob = null
+                    onComplete?.invoke()
                     break
                 }
 
-                delay(1000L)
+                _remainingMillis.value = remainingMillis
 
-                val updatedRemaining = ((_remainingSeconds.value ?: 0) - 1).coerceAtLeast(0)
-                _remainingSeconds.value = updatedRemaining
-
-                if (updatedRemaining == 0) {
-                    onComplete?.invoke()
-                    timerJob = null
-                    break
-                }
+                delay(16L)
             }
         }
+    }
+
+    private fun currentRemainingMillis(): Long {
+        val elapsedMillis = startedAt.elapsedNow().inWholeMilliseconds
+        return remainingMillisOnPause - elapsedMillis
     }
 }

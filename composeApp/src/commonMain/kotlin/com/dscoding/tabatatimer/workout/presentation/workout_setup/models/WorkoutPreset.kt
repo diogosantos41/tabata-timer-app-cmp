@@ -4,9 +4,15 @@ import com.dscoding.tabatatimer.core.presentation.utils.UiText
 import tabatatimer.composeapp.generated.resources.Res
 import tabatatimer.composeapp.generated.resources.classic
 import tabatatimer.composeapp.generated.resources.endurance
-import tabatatimer.composeapp.generated.resources.quick
+import tabatatimer.composeapp.generated.resources.light
+import tabatatimer.composeapp.generated.resources.preset_description
 
-enum class WorkoutPreset(val title: UiText, val workSeconds: Int, val restSeconds: Int, val rounds: Int) {
+enum class WorkoutPreset(
+    val title: UiText,
+    val workSeconds: Int,
+    val restSeconds: Int,
+    val rounds: Int
+) {
     Classic(
         title = UiText.Resource(Res.string.classic),
         workSeconds = 20,
@@ -16,18 +22,21 @@ enum class WorkoutPreset(val title: UiText, val workSeconds: Int, val restSecond
     Endurance(
         title = UiText.Resource(Res.string.endurance),
         workSeconds = 40,
-        restSeconds = 15,
+        restSeconds = 20,
         rounds = 8
     ),
-    Quick(
-        title = UiText.Resource(Res.string.quick),
-        workSeconds = 15,
-        restSeconds = 5,
-        rounds = 4
+    Light(
+        title = UiText.Resource(Res.string.light),
+        workSeconds = 20,
+        restSeconds = 20,
+        rounds = 6
     );
 
-    val display: String
-        get() = "${workSeconds}s / ${restSeconds}s / $rounds"
+    val display: UiText
+        get() = UiText.Resource(
+            Res.string.preset_description,
+            arrayOf(workSeconds, restSeconds, rounds)
+        )
 
     fun matches(workSeconds: Int, restSeconds: Int, rounds: Int): Boolean {
         return this.workSeconds == workSeconds &&

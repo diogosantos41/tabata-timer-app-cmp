@@ -3,9 +3,11 @@ package com.dscoding.tabatatimer.workout.presentation.workout_session
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dscoding.tabatatimer.core.presentation.models.WorkoutSessionItem
+import com.dscoding.tabatatimer.core.presentation.utils.UiText
 import com.dscoding.tabatatimer.workout.domain.CountdownTimer
-import com.dscoding.tabatatimer.workout.presentation.WorkoutSessionCoordinator
+import com.dscoding.tabatatimer.workout.presentation.util.WorkoutSessionStore
 import com.dscoding.tabatatimer.workout.presentation.workout_session.models.TimerPlayState
+import com.dscoding.tabatatimer.workout.presentation.workout_session.utils.secondsToMillis
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -16,9 +18,11 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import tabatatimer.composeapp.generated.resources.Res
+import tabatatimer.composeapp.generated.resources.finish
 
 class WorkoutSessionViewModel(
-    private val sessionCoordinator: WorkoutSessionCoordinator,
+    private val sessionStore: WorkoutSessionStore,
     private val countdownTimer: CountdownTimer,
 ) : ViewModel() {
 
@@ -71,7 +75,7 @@ class WorkoutSessionViewModel(
 
             WorkoutSessionAction.OnStopWorkoutClick -> {
                 countdownTimer.stop()
-                sessionCoordinator.clearSession()
+                sessionStore.clearSession()
                 viewModelScope.launch {
                     eventChannel.send(WorkoutSessionEvent.StopWorkout)
                 }
@@ -80,7 +84,7 @@ class WorkoutSessionViewModel(
     }
 
     private fun setupSession() {
-        workoutSessionItems = sessionCoordinator.getSessionItems().orEmpty()
+        workoutSessionItems = sessionStore.getSessionItems().orEmpty()
         currentSessionIndex = 0
         updateCurrentSessionState()
     }
@@ -94,8 +98,9 @@ class WorkoutSessionViewModel(
             it.copy(
                 rounds = rounds,
                 currentWorkoutSessionItem = currentItem,
-                nextWorkoutDescription = nextItem?.description ?: currentItem.description,
-                roundSecondsRemaining = currentItem.seconds,
+                nextWorkoutDescription = nextItem?.description
+                    ?: UiText.Resource(Res.string.finish),
+                roundMillisRemaining = currentItem.seconds.secondsToMillis(),
                 currentTimerPlayState = TimerPlayState.Running
             )
         }
@@ -112,10 +117,12 @@ class WorkoutSessionViewModel(
 
     private fun observeCountdown() {
         countdownTimer
-            .remainingSeconds
-            .onEach { seconds ->
+            .remainingMillis
+            .onEach { millis ->
                 _state.update {
-                    it.copy(roundSecondsRemaining = seconds ?: 0)
+                    it.copy(
+                        roundMillisRemaining = millis ?: 0L,
+                    )
                 }
             }
             .launchIn(viewModelScope)
@@ -140,7 +147,7 @@ class WorkoutSessionViewModel(
 
     private fun finishWorkout() {
         countdownTimer.stop()
-        sessionCoordinator.clearSession()
+        sessionStore.clearSession()
         viewModelScope.launch {
             eventChannel.send(WorkoutSessionEvent.SessionCompleted)
         }

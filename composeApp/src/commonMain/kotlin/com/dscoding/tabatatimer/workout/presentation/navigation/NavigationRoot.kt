@@ -34,7 +34,11 @@ fun NavigationRoot(
         composable<NavigationRoute.WorkoutSession> {
             WorkoutSessionRoot(
                 onWorkoutSessionFinished = {
-                    navController.navigate(NavigationRoute.WorkoutFinished)
+                    navController.navigate(NavigationRoute.WorkoutFinished) {
+                        popUpTo(NavigationRoute.WorkoutSetup) {
+                            inclusive = false
+                        }
+                    }
                 },
                 onGoBack = {
                     navController.popBackStack()

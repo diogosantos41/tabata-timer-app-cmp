@@ -94,7 +94,7 @@ fun WorkoutSetupScreen(
                 WorkoutPreset.entries.forEach { preset ->
                     TabataChip(
                         title = preset.title.asString(),
-                        description = preset.display,
+                        description = preset.display.asString(),
                         onClick = { onAction(WorkoutSetupAction.OnPresetClick(preset)) },
                         isHighlighted = preset.matches(
                             workSeconds = state.selectedWorkTime.seconds,

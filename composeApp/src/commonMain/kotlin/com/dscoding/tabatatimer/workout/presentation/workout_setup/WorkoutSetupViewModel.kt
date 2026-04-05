@@ -2,7 +2,8 @@ package com.dscoding.tabatatimer.workout.presentation.workout_setup
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.dscoding.tabatatimer.workout.presentation.WorkoutSessionCoordinator
+import com.dscoding.tabatatimer.workout.presentation.util.WorkoutSessionFactory
+import com.dscoding.tabatatimer.workout.presentation.util.WorkoutSessionStore
 import com.dscoding.tabatatimer.workout.presentation.workout_setup.models.TimeUi
 import com.dscoding.tabatatimer.workout.presentation.workout_setup.models.defaultPreset
 import kotlinx.coroutines.channels.Channel
@@ -15,8 +16,9 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class WorkoutSetupViewModel(
-    private val sessionCoordinator: WorkoutSessionCoordinator
-) : ViewModel() {
+    private val sessionBuilder: WorkoutSessionFactory,
+    private val sessionStore: WorkoutSessionStore,
+    ) : ViewModel() {
 
     private var hasLoadedInitialData = false
 
@@ -81,11 +83,12 @@ class WorkoutSetupViewModel(
             }
 
             WorkoutSetupAction.OnStartWorkoutClick -> {
-                sessionCoordinator.buildSetWorkoutSession(
+                val workoutSessionList = sessionBuilder.buildWorkoutSession(
                     workSeconds = state.value.selectedWorkTime.seconds,
                     restSeconds = state.value.selectedRestTime.seconds,
                     rounds = state.value.selectedRounds
                 )
+                sessionStore.setSessionItems(workoutSessionList)
                 viewModelScope.launch {
                     eventChannel.send(
                         WorkoutSetupEvent.OnStartWorkout
