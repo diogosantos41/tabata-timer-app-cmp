@@ -2,6 +2,7 @@ package com.dscoding.tabatatimer.workout.presentation.workout_session
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.dscoding.tabatatimer.core.domain.WorkoutPreferences
 import com.dscoding.tabatatimer.core.presentation.models.WorkoutSessionItem
 import com.dscoding.tabatatimer.core.presentation.utils.UiText
 import com.dscoding.tabatatimer.workout.domain.audio.WorkoutAudio
@@ -26,6 +27,7 @@ import tabatatimer.composeapp.generated.resources.finish
 class WorkoutSessionViewModel(
     private val sessionStore: WorkoutSessionStore,
     private val countdownTimer: CountdownTimer,
+    private val workoutPreferences: WorkoutPreferences,
     private val workoutAudio: WorkoutAudio
 ) : ViewModel() {
 
@@ -42,6 +44,7 @@ class WorkoutSessionViewModel(
             if (!hasLoadedInitialData) {
                 setupSession()
                 observeCountdown()
+                observeSoundEnabled()
                 startCurrentCountdown()
                 hasLoadedInitialData = true
             }
@@ -81,6 +84,12 @@ class WorkoutSessionViewModel(
                 sessionStore.clearSession()
                 viewModelScope.launch {
                     eventChannel.send(WorkoutSessionEvent.StopWorkout)
+                }
+            }
+
+            WorkoutSessionAction.OnToggleSoundClick -> {
+                viewModelScope.launch {
+                    workoutPreferences.setSoundEnabled(!state.value.isSoundEnabled)
                 }
             }
         }
@@ -154,6 +163,19 @@ class WorkoutSessionViewModel(
         viewModelScope.launch {
             eventChannel.send(WorkoutSessionEvent.SessionCompleted)
         }
+    }
+
+    private fun observeSoundEnabled() {
+        workoutPreferences
+            .observeSoundEnabled()
+            .onEach { soundEnabled ->
+                _state.update {
+                    it.copy(
+                        isSoundEnabled = soundEnabled
+                    )
+                }
+            }
+            .launchIn(viewModelScope)
     }
 }
 

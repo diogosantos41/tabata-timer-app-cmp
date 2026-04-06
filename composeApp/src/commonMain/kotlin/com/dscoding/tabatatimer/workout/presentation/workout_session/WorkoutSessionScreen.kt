@@ -12,6 +12,8 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.VolumeOff
+import androidx.compose.material.icons.automirrored.filled.VolumeUp
 import androidx.compose.material.icons.filled.Pause
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.SkipNext
@@ -90,18 +92,28 @@ fun WorkoutSessionScreen(
                 .verticalScroll(scrollState),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Spacer(modifier = Modifier.height(LargeSpacing))
-            Text(
-                text = stringResource(
-                    Res.string.round_progress,
-                    state.currentWorkoutSessionItem.round,
-                    state.rounds
-                ),
-                style = MaterialTheme.typography.titleSmall,
-                color = MaterialTheme.colorScheme.onBackground,
-                textAlign = TextAlign.Start,
-                modifier = Modifier.fillMaxWidth()
-            )
+            Spacer(modifier = Modifier.height(NormalSpacing))
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.Bottom) {
+                Text(
+                    text = stringResource(
+                        Res.string.round_progress,
+                        state.currentWorkoutSessionItem.round,
+                        state.rounds
+                    ),
+                    style = MaterialTheme.typography.titleSmall,
+                    color = MaterialTheme.colorScheme.onBackground,
+                    textAlign = TextAlign.Start,
+                )
+                TabataIconButton(
+                    iconImageVector = if (state.isSoundEnabled)
+                        Icons.AutoMirrored.Filled.VolumeUp
+                    else
+                        Icons.AutoMirrored.Filled.VolumeOff,
+                    contentDescription = stringResource(Res.string.skip_exercise),
+                    onClick = { onAction(WorkoutSessionAction.OnToggleSoundClick) }
+                )
+            }
+
             Spacer(modifier = Modifier.height(SmallSpacing))
             TabataBar(
                 progress = state.roundProgress,
@@ -171,7 +183,8 @@ private fun WorkoutSessionScreenPreview() {
                 ),
                 currentTimerPlayState = TimerPlayState.Running,
                 nextWorkoutDescription = UiText.Resource(Res.string.finish),
-                roundMillisRemaining = 15.secondsToMillis()
+                roundMillisRemaining = 15.secondsToMillis(),
+                isSoundEnabled = true
             ),
             onAction = {}
         )

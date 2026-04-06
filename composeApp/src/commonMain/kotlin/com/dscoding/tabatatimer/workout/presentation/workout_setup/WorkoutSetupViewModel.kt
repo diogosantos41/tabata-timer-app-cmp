@@ -33,7 +33,7 @@ class WorkoutSetupViewModel(
     val state = _state
         .onStart {
             if (!hasLoadedInitialData) {
-                initializeState()
+                observeWorkoutSettings()
                 hasLoadedInitialData = true
             }
         }
@@ -87,12 +87,23 @@ class WorkoutSetupViewModel(
             }
 
             WorkoutSetupAction.OnStartWorkoutClick -> {
+                val workSeconds = state.value.selectedWorkTime.seconds
+                val restSeconds = state.value.selectedRestTime.seconds
+                val rounds = state.value.selectedRounds
+
+                updateWorkoutSettings(
+                    workSeconds = workSeconds,
+                    restSeconds = restSeconds,
+                    rounds = rounds
+                )
+
                 val workoutSession = sessionBuilder.buildWorkoutSession(
-                    workSeconds = state.value.selectedWorkTime.seconds,
-                    restSeconds = state.value.selectedRestTime.seconds,
-                    rounds = state.value.selectedRounds
+                    workSeconds = workSeconds,
+                    restSeconds = restSeconds,
+                    rounds = rounds
                 )
                 sessionStore.setWorkoutSession(workoutSession)
+
                 viewModelScope.launch {
                     eventChannel.send(
                         WorkoutSetupEvent.OnStartWorkout
@@ -102,17 +113,33 @@ class WorkoutSetupViewModel(
         }
     }
 
-    private fun initializeState() {
-        val preset = defaultPreset
-        _state.update {
-            it.copy(
-                selectedWorkTime = TimeUi(
-                    seconds = preset.workSeconds,
-                ),
-                selectedRestTime = TimeUi(
-                    seconds = preset.restSeconds,
-                ),
-                selectedRounds = preset.rounds,
+    private fun observeWorkoutSettings() {
+        workoutPreferences.observeLastWorkoutSettings()
+            .onEach { (workSeconds, restSeconds, rounds) ->
+                _state.update {
+                    it.copy(
+                        selectedWorkTime = TimeUi(
+                            seconds = workSeconds ?: defaultPreset.workSeconds,
+                        ),
+                        selectedRestTime = TimeUi(
+                            seconds = restSeconds ?: defaultPreset.restSeconds,
+                        ),
+                        selectedRounds = rounds ?: defaultPreset.rounds,
+                    )
+                }
+            }.launchIn(viewModelScope)
+    }
+
+    private fun updateWorkoutSettings(
+        workSeconds: Int,
+        restSeconds: Int,
+        rounds: Int
+    ) {
+        viewModelScope.launch {
+            workoutPreferences.setLastWorkoutSettings(
+                workSeconds = workSeconds,
+                restSeconds = restSeconds,
+                rounds = rounds
             )
         }
     }

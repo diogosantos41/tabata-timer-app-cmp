@@ -11,6 +11,6 @@ interface WorkoutPreferences {
     fun observeDarkModeEnabled(): Flow<Boolean>
 }
 
-typealias WorkSeconds = Int
-typealias RestSeconds = Int
-typealias Rounds = Int
+typealias WorkSeconds = Int?
+typealias RestSeconds = Int?
+typealias Rounds = Int?

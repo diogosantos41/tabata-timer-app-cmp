@@ -22,6 +22,7 @@ data class WorkoutSessionState(
     val nextWorkoutDescription: UiText = UiText.Resource(Res.string.work),
     val currentTimerPlayState: TimerPlayState = TimerPlayState.Running,
     val roundMillisRemaining: Long = Long.MAX_VALUE,
+    val isSoundEnabled: Boolean = false
 ) {
     val roundSecondsRemaining: Int
         get() = roundMillisRemaining.millisToSecondsCeil()

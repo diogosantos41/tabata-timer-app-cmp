@@ -53,7 +53,7 @@ fun WorkoutSetting(
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(SmallSpacing),
-            modifier = Modifier.padding(horizontal = SmallSpacing, vertical = SmallSpacing)
+            modifier = Modifier.padding(horizontal = NormalSpacing, vertical = SmallSpacing)
         ) {
             Icon(
                 imageVector = icon,

@@ -5,6 +5,9 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
+import com.dscoding.tabatatimer.core.domain.RestSeconds
+import com.dscoding.tabatatimer.core.domain.Rounds
+import com.dscoding.tabatatimer.core.domain.WorkSeconds
 import com.dscoding.tabatatimer.core.domain.WorkoutPreferences
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -33,12 +36,12 @@ class DataStoreWorkoutPreferences(
         }
     }
 
-    override fun observeLastWorkoutSettings(): Flow<Triple<Int, Int, Int>> {
+    override fun observeLastWorkoutSettings(): Flow<Triple<WorkSeconds, RestSeconds, Rounds>> {
         return dataStore.data.map { prefs ->
             Triple(
-                prefs[workSecondsKey] ?: 20,
-                prefs[restSecondsKey] ?: 10,
-                prefs[roundsKey] ?: 8
+                prefs[workSecondsKey],
+                prefs[restSecondsKey],
+                prefs[roundsKey]
             )
         }
     }
