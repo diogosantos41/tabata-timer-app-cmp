@@ -2,6 +2,7 @@ package com.dscoding.tabatatimer.workout.presentation.workout_setup
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.dscoding.tabatatimer.core.domain.WorkoutPreferences
 import com.dscoding.tabatatimer.workout.presentation.util.WorkoutSessionFactory
 import com.dscoding.tabatatimer.workout.presentation.util.WorkoutSessionStore
 import com.dscoding.tabatatimer.workout.presentation.workout_setup.models.TimeUi
@@ -9,6 +10,8 @@ import com.dscoding.tabatatimer.workout.presentation.workout_setup.models.defaul
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
@@ -18,7 +21,8 @@ import kotlinx.coroutines.launch
 class WorkoutSetupViewModel(
     private val sessionBuilder: WorkoutSessionFactory,
     private val sessionStore: WorkoutSessionStore,
-    ) : ViewModel() {
+    private val workoutPreferences: WorkoutPreferences
+) : ViewModel() {
 
     private var hasLoadedInitialData = false
 

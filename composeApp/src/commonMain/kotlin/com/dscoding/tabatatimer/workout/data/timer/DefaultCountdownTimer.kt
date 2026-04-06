@@ -1,6 +1,6 @@
 package com.dscoding.tabatatimer.workout.data.timer
 
-import com.dscoding.tabatatimer.workout.domain.CountdownTimer
+import com.dscoding.tabatatimer.workout.domain.timer.CountdownTimer
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.currentCoroutineContext

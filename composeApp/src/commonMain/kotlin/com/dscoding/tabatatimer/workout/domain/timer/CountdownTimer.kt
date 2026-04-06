@@ -1,4 +1,5 @@
-package com.dscoding.tabatatimer.workout.domain
+package com.dscoding.tabatatimer.workout.domain.timer
+
 import kotlinx.coroutines.flow.StateFlow
 
 interface CountdownTimer {

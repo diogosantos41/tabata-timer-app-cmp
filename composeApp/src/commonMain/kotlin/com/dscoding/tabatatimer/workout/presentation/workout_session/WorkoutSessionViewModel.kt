@@ -4,7 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dscoding.tabatatimer.core.presentation.models.WorkoutSessionItem
 import com.dscoding.tabatatimer.core.presentation.utils.UiText
-import com.dscoding.tabatatimer.workout.domain.CountdownTimer
+import com.dscoding.tabatatimer.workout.domain.audio.WorkoutAudio
+import com.dscoding.tabatatimer.workout.domain.audio.models.SoundEffect
+import com.dscoding.tabatatimer.workout.domain.timer.CountdownTimer
 import com.dscoding.tabatatimer.workout.presentation.util.WorkoutSessionStore
 import com.dscoding.tabatatimer.workout.presentation.workout_session.models.TimerPlayState
 import com.dscoding.tabatatimer.workout.presentation.workout_session.utils.secondsToMillis
@@ -24,6 +26,7 @@ import tabatatimer.composeapp.generated.resources.finish
 class WorkoutSessionViewModel(
     private val sessionStore: WorkoutSessionStore,
     private val countdownTimer: CountdownTimer,
+    private val workoutAudio: WorkoutAudio
 ) : ViewModel() {
 
     private var hasLoadedInitialData = false
@@ -129,6 +132,7 @@ class WorkoutSessionViewModel(
     }
 
     private fun onCountdownCompleted() {
+        workoutAudio.playSoundEffect(SoundEffect.WHISTLE)
         moveToNextExerciseOrFinish()
     }
 
