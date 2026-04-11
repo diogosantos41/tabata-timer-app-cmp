@@ -5,9 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.dscoding.tabatatimer.core.domain.WorkoutPreferences
 import com.dscoding.tabatatimer.core.presentation.models.WorkoutSessionItem
 import com.dscoding.tabatatimer.core.presentation.utils.UiText
-import com.dscoding.tabatatimer.workout.domain.audio.WorkoutAudio
-import com.dscoding.tabatatimer.workout.domain.audio.models.SoundEffect
-import com.dscoding.tabatatimer.workout.domain.timer.CountdownTimer
+import com.dscoding.tabatatimer.workout.domain.WorkoutSessionCoordinator
 import com.dscoding.tabatatimer.workout.presentation.util.WorkoutSessionStore
 import com.dscoding.tabatatimer.workout.presentation.workout_session.models.TimerPlayState
 import com.dscoding.tabatatimer.workout.presentation.workout_session.utils.secondsToMillis
@@ -26,9 +24,8 @@ import tabatatimer.composeapp.generated.resources.finish
 
 class WorkoutSessionViewModel(
     private val sessionStore: WorkoutSessionStore,
-    private val countdownTimer: CountdownTimer,
     private val workoutPreferences: WorkoutPreferences,
-    private val workoutAudio: WorkoutAudio
+    private val workoutSessionCoordinator: WorkoutSessionCoordinator
 ) : ViewModel() {
 
     private var hasLoadedInitialData = false
@@ -43,7 +40,6 @@ class WorkoutSessionViewModel(
         .onStart {
             if (!hasLoadedInitialData) {
                 setupSession()
-                observeCountdown()
                 observeSoundEnabled()
                 startCurrentCountdown()
                 hasLoadedInitialData = true
@@ -60,14 +56,14 @@ class WorkoutSessionViewModel(
             WorkoutSessionAction.OnResumePauseClick -> {
                 when (state.value.currentTimerPlayState) {
                     TimerPlayState.Running -> {
-                        countdownTimer.pause()
+                        workoutSessionCoordinator.pauseTimer()
                         _state.update {
                             it.copy(currentTimerPlayState = TimerPlayState.Paused)
                         }
                     }
 
                     TimerPlayState.Paused -> {
-                        countdownTimer.resume()
+                        workoutSessionCoordinator.resumeTimer()
                         _state.update {
                             it.copy(currentTimerPlayState = TimerPlayState.Running)
                         }
@@ -80,7 +76,7 @@ class WorkoutSessionViewModel(
             }
 
             WorkoutSessionAction.OnStopWorkoutClick -> {
-                countdownTimer.stop()
+                workoutSessionCoordinator.stopTimer()
                 sessionStore.clearSession()
                 viewModelScope.launch {
                     eventChannel.send(WorkoutSessionEvent.StopWorkout)
@@ -121,27 +117,21 @@ class WorkoutSessionViewModel(
     private fun startCurrentCountdown() {
         val currentItem = workoutSessionItems.getOrNull(currentSessionIndex) ?: return
 
-        countdownTimer.start(
+        workoutSessionCoordinator.runCountdownTimer(
+            scope = viewModelScope,
             totalSeconds = currentItem.seconds,
-            onComplete = { onCountdownCompleted() }
-        )
-    }
-
-    private fun observeCountdown() {
-        countdownTimer
-            .remainingMillis
-            .onEach { millis ->
+            onComplete = { onCountdownCompleted() },
+            onTimeTick = { millis ->
                 _state.update {
                     it.copy(
-                        roundMillisRemaining = millis ?: 0L,
+                        roundMillisRemaining = millis,
                     )
                 }
             }
-            .launchIn(viewModelScope)
+        )
     }
 
     private fun onCountdownCompleted() {
-        workoutAudio.playSoundEffect(SoundEffect.WHISTLE)
         moveToNextExerciseOrFinish()
     }
 
@@ -159,7 +149,7 @@ class WorkoutSessionViewModel(
     }
 
     private fun finishWorkout() {
-        countdownTimer.stop()
+        workoutSessionCoordinator.stopTimer()
         viewModelScope.launch {
             eventChannel.send(WorkoutSessionEvent.SessionCompleted)
         }
