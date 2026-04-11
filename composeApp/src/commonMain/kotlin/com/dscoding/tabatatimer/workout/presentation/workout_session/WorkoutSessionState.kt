@@ -3,7 +3,7 @@ package com.dscoding.tabatatimer.workout.presentation.workout_session
 import com.dscoding.tabatatimer.core.presentation.models.WorkoutSessionItem
 import com.dscoding.tabatatimer.core.presentation.models.WorkoutType
 import com.dscoding.tabatatimer.core.presentation.utils.UiText
-import com.dscoding.tabatatimer.workout.presentation.workout_session.models.TimerPlayState
+import com.dscoding.tabatatimer.workout.domain.session.SessionPlayState
 import com.dscoding.tabatatimer.workout.presentation.workout_session.utils.millisToSecondsCeil
 import com.dscoding.tabatatimer.workout.presentation.workout_session.utils.secondsToMillis
 import tabatatimer.composeapp.generated.resources.Res
@@ -20,7 +20,7 @@ data class WorkoutSessionState(
         round = 1
     ),
     val nextWorkoutDescription: UiText = UiText.Resource(Res.string.work),
-    val currentTimerPlayState: TimerPlayState = TimerPlayState.Running,
+    val currentSessionPlayState: SessionPlayState = SessionPlayState.Running,
     val roundMillisRemaining: Long = Long.MAX_VALUE,
     val isSoundEnabled: Boolean = false
 ) {

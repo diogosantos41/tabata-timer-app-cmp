@@ -41,8 +41,8 @@ import com.dscoding.tabatatimer.core.presentation.theme.TabataTimerTheme
 import com.dscoding.tabatatimer.core.presentation.utils.ObserveAsEvents
 import com.dscoding.tabatatimer.core.presentation.utils.UiText
 import com.dscoding.tabatatimer.core.presentation.utils.color
+import com.dscoding.tabatatimer.workout.domain.session.SessionPlayState
 import com.dscoding.tabatatimer.workout.presentation.workout_session.components.TabataWorkoutTimer
-import com.dscoding.tabatatimer.workout.presentation.workout_session.models.TimerPlayState
 import com.dscoding.tabatatimer.workout.presentation.workout_session.utils.secondsToMillis
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -93,7 +93,11 @@ fun WorkoutSessionScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Spacer(modifier = Modifier.height(NormalSpacing))
-            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.Bottom) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.Bottom
+            ) {
                 Text(
                     text = stringResource(
                         Res.string.round_progress,
@@ -128,7 +132,7 @@ fun WorkoutSessionScreen(
                 currentWorkout = state.currentWorkoutSessionItem.description.asString(),
                 nextWorkout = state.nextWorkoutDescription.asString(),
                 color =
-                    if (state.currentTimerPlayState == TimerPlayState.Running)
+                    if (state.currentSessionPlayState == SessionPlayState.Running)
                         state.currentWorkoutSessionItem.workoutType.color()
                     else
                         MaterialTheme.colorScheme.onSurfaceVariant,
@@ -146,14 +150,14 @@ fun WorkoutSessionScreen(
                 )
                 TabataPrimaryButton(
                     text =
-                        if (state.currentTimerPlayState == TimerPlayState.Running)
+                        if (state.currentSessionPlayState == SessionPlayState.Running)
                             stringResource(Res.string.pause)
                         else
                             stringResource(Res.string.resume),
                     onClick = { onAction(WorkoutSessionAction.OnResumePauseClick) },
                     color = state.currentWorkoutSessionItem.workoutType.color(),
                     iconImageVector =
-                        if (state.currentTimerPlayState == TimerPlayState.Running)
+                        if (state.currentSessionPlayState == SessionPlayState.Running)
                             Icons.Default.Pause
                         else
                             Icons.Default.PlayArrow
@@ -181,7 +185,7 @@ private fun WorkoutSessionScreenPreview() {
                     workoutType = WorkoutType.Work,
                     round = 1
                 ),
-                currentTimerPlayState = TimerPlayState.Running,
+                currentSessionPlayState = SessionPlayState.Running,
                 nextWorkoutDescription = UiText.Resource(Res.string.finish),
                 roundMillisRemaining = 15.secondsToMillis(),
                 isSoundEnabled = true
