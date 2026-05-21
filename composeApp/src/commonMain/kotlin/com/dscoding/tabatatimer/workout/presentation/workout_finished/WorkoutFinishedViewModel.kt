@@ -3,6 +3,7 @@ package com.dscoding.tabatatimer.workout.presentation.workout_finished
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dscoding.tabatatimer.workout.presentation.util.WorkoutSessionStore
+import com.dscoding.tabatatimer.workout.presentation.workout_finished.utils.calculateWorkoutSummary
 import com.dscoding.tabatatimer.workout.presentation.workout_finished.utils.getRandomWorkoutCompletionMessage
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -27,6 +28,7 @@ class WorkoutFinishedViewModel(
         .onStart {
             if (!hasLoadedInitialData) {
                 setCompletionMessage()
+                setWorkoutSummary()
                 hasLoadedInitialData = true
             }
         }
@@ -54,6 +56,13 @@ class WorkoutFinishedViewModel(
             it.copy(
                 completionMessage = getRandomWorkoutCompletionMessage()
             )
+        }
+    }
+
+    private fun setWorkoutSummary() {
+        val summary = calculateWorkoutSummary(sessionStore.getWorkoutSession())
+        _state.update {
+            it.copy(summary = summary)
         }
     }
 }

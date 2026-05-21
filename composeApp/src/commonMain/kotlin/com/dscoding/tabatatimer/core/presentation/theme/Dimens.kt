@@ -8,4 +8,5 @@ object Dimens {
     val SmallSpacing = 10.dp
     val NormalSpacing = 16.dp
     val LargeSpacing = 32.dp
+    val xLargeSpacing = 48.dp
 }

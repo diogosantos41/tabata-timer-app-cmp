@@ -31,7 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.dscoding.tabatatimer.core.presentation.components.TabataBar
 import com.dscoding.tabatatimer.core.presentation.components.TabataIconButton
-import com.dscoding.tabatatimer.core.presentation.components.TabataPrimaryButton
+import com.dscoding.tabatatimer.core.presentation.components.TabataButton
 import com.dscoding.tabatatimer.core.presentation.models.WorkoutSessionItem
 import com.dscoding.tabatatimer.core.presentation.models.WorkoutType
 import com.dscoding.tabatatimer.core.presentation.theme.Dimens.LargeSpacing
@@ -148,7 +148,7 @@ fun WorkoutSessionScreen(
                     contentDescription = stringResource(Res.string.stop_workout_session),
                     onClick = { onAction(WorkoutSessionAction.OnStopWorkoutClick) }
                 )
-                TabataPrimaryButton(
+                TabataButton(
                     text =
                         if (state.currentSessionPlayState == SessionPlayState.Running)
                             stringResource(Res.string.pause)

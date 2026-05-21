@@ -23,8 +23,13 @@
     <string name="resume">Resume</string>
     <string name="stop_workout_session">Stop Workout Session</string>
     <string name="skip_exercise">Skip Exercise</string>
+    <string name="workout_complete_1">Workout</string>
+    <string name="workout_complete_2">Complete!</string>
     <string name="go_again">Go Again</string>
     <string name="setup_new_workout">Setup New Workout</string>
+    <string name="workout_summary_duration">Duration</string>
+    <string name="workout_summary_rounds">Rounds</string>
+    <string name="workout_summary_calories">Calories</string>
 
     <string name="workout_msg_1">You crushed it! 💪</string>
     <string name="workout_msg_2">Nice work! 🔥</string>

@@ -22,9 +22,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.dscoding.tabatatimer.workout.presentation.workout_setup.components.TabataChip
-import com.dscoding.tabatatimer.core.presentation.components.TabataPrimaryButton
+import com.dscoding.tabatatimer.core.presentation.components.TabataButton
 import com.dscoding.tabatatimer.core.presentation.components.TabataSectionHeader
-import com.dscoding.tabatatimer.core.presentation.models.WorkoutSessionItem
 import com.dscoding.tabatatimer.workout.presentation.workout_setup.components.WorkoutSetting
 import com.dscoding.tabatatimer.workout.presentation.workout_setup.components.WorkoutSummary
 import com.dscoding.tabatatimer.core.presentation.theme.Dimens.LargeSpacing
@@ -144,7 +143,7 @@ fun WorkoutSetupScreen(
                 modifier = Modifier.fillMaxWidth()
             )
             Spacer(modifier = Modifier.weight(1f))
-            TabataPrimaryButton(
+            TabataButton(
                 iconImageVector = Icons.Default.PlayArrow,
                 text = stringResource(Res.string.start_workout),
                 onClick = { onAction(WorkoutSetupAction.OnStartWorkoutClick) },
