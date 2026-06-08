@@ -25,6 +25,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.keepScreenOn
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -89,7 +90,8 @@ fun WorkoutSessionScreen(
                 .fillMaxSize()
                 .padding(paddingValues)
                 .padding(horizontal = NormalSpacing)
-                .verticalScroll(scrollState),
+                .verticalScroll(scrollState)
+                .keepScreenOn(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Spacer(modifier = Modifier.height(NormalSpacing))
